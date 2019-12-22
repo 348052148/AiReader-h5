@@ -57,17 +57,14 @@ export default {
   components: {},
   data() {
     return {
-      images: [
-        "https://gw.alicdn.com/L1/723/1559622921/7b/06/03/7b06031349b594432e34c9e4704b4ee9.png",
-        "https://gw.alicdn.com/L1/723/1557815538/39/94/0a/39940a428e1efd6cc35b8b46b90e41aa.jpg"
-      ],
-      list: [1, 2, 4, 5, 6],
+      list:[1,2,3],
       error: false,
       loading: false,
       book:{},
     };
   },
   created(){
+    document.documentElement.scrollTop = 0;
     let booId = this.$route.query.bookId;
     Api.getBook(booId,(res)=> {
         this.book = res.data
@@ -146,6 +143,7 @@ export default {
   display: -ms-flexbox;
   display: flex;
   height: 100%;
+  font-size: 12px;
 }
 .book .cover {
   display: block;

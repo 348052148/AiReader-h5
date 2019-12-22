@@ -121,7 +121,7 @@ export default {
     let bookId = this.$route.query.bookId;
     this.bookId = bookId;
     if(this.$route.query.chapter) {
-      this.chapter = this.$route.query.chapter;
+      this.chapter = parseInt(this.$route.query.chapter);
     } else {
        this.chapter = 0;
     }
@@ -130,6 +130,7 @@ export default {
       forbidClick: true
     });
     Api.getBookContents(bookId, this.chapter, res => {
+      document.documentElement.scrollTop = 0;
       this.chapterContents = res.data;
       Toast.clear();
     });
@@ -141,6 +142,7 @@ export default {
         forbidClick: true
       });
       Api.getBookContents(this.bookId, this.chapter + 1, res => {
+        document.documentElement.scrollTop = 0;
         this.chapterContents = res.data;
         this.chapter = this.chapter + 1;
         Toast.clear();
@@ -155,6 +157,7 @@ export default {
         forbidClick: true
       });
       Api.getBookContents(this.bookId, this.chapter - 1, res => {
+        document.documentElement.scrollTop = 0;
         this.chapterContents = res.data;
         this.chapter = this.chapter + 1;
         Toast.clear();

@@ -153,14 +153,15 @@ export default {
   padding-top: 2px;
   position: relative;
   text-align: center;
+  font-size: 14px;
 }
 
 .searchIcon {
   position: absolute;
-  top: 0.2em;
+  top: 0.4em;
   left: 0.4em;
   z-index: 20;
-  font-size: 30px;
+  font-size: 20px;
 }
 
 .searchContainer input {
@@ -243,6 +244,7 @@ export default {
   display: -ms-flexbox;
   display: flex;
   height: 100%;
+  font-size: 12px;
 }
 .book .cover {
   display: block;

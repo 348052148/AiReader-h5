@@ -90,6 +90,7 @@ export default {
   min-height: 100%;
   margin: 0 auto;
   overflow: hidden;
+  font-size: 12px;
 }
 
 #nav {

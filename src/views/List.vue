@@ -18,7 +18,8 @@
 </div>
 
     <van-list v-model="loading" :error.sync="error" error-text="请求失败，点击重新加载" @load="onLoad">
-      <van-cell class="book" v-for="(book,index) in books" :key="index">
+      <router-link v-for="(book,index) in books" :key="index" :to="'/book?bookId='+ book.book_id">
+      <van-cell class="book" >
         <van-image
           class="cover"
           width="100"
@@ -33,6 +34,7 @@
           >{{book.detail}}</span>
         </div>
       </van-cell>
+      </router-link>
     </van-list>
   </div>
 </template>
@@ -86,6 +88,7 @@ export default {
       Api.getBooks(this.attr,1, res => {
         this.books = res.data.list;
         this.loading = false;
+        this.page = 1;
       });
     },
     selectClassify(index){
@@ -100,7 +103,9 @@ export default {
       Api.getBooks(this.attr,1, res => {
         this.books = res.data.list;
         this.loading = false;
+        this.page = 1;
       });
+      
     },
     selectClass(obj){
         if(obj.active) {
@@ -126,6 +131,7 @@ export default {
   line-height: 35px;
   padding-left: 8px;
   border-bottom: 1px #eee solid;
+  font-size: 14px;
   color: black;
   overflow-y:auto; overflow-x:auto;
 }
@@ -136,7 +142,7 @@ export default {
   height: 35px;
   display: inline-block;
   line-height: 35px;
-  font-size: 16px;
+  font-size: 15px;
   padding: 0 5px;
 }
 
@@ -157,6 +163,7 @@ export default {
   display: -ms-flexbox;
   display: flex;
   height: 100%;
+  font-size: 12px;
 }
 .book .cover {
   display: block;
