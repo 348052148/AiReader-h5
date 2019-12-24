@@ -20,6 +20,22 @@
   </div>
 </template>
 
+<script>
+export default {
+  data(){
+    return {
+
+    };
+  },
+  created() {
+    this.$router.replace("/login");
+  },
+  methods:{
+
+  }
+}
+</script>
+
 <style scoped>
 .userInfo {
   background: #fff;

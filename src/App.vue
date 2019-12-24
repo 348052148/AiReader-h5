@@ -52,8 +52,8 @@ export default {
   },
   methods: {
     tabHandle(path){
-      if (path == "/home" || path == "/bookshelf" || path == "/user") {
-          if (path == "/home") {
+      if (path == "/" || path == "/home" || path == "/bookshelf" || path == "/user") {
+          if (path == "/home" || path == "/") {
             this.active = 0;
           }
           if (path == "/bookshelf") {
@@ -90,7 +90,12 @@ export default {
   min-height: 100%;
   margin: 0 auto;
   overflow: hidden;
-  font-size: 12px;
+  font-size: 15px;
+}
+
+.van-nav-bar__left {
+  font-size: 15px;
+  left: 5px;
 }
 
 #nav {

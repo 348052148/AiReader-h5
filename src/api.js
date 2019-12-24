@@ -39,6 +39,12 @@ class Api {
             sucessFn(response)
         })
     }
+    searchBooks(keyword, page, sucessFn){
+        return axios.get(host + '/api/search?keyword='+keyword+'&page='+page)
+        .then(function (response) {
+            sucessFn(response)
+        })
+    }
 }
 
 export default new Api()

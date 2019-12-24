@@ -2,15 +2,14 @@
   <div class="home">
     <div class="search">
       <div class="searchContainer">
-        <van-icon class="searchIcon" color="#999" name="search" />
-        <input
-          type="text"
-          confirm-type="search"
-          placeholder-class="placerStyle"
-          bindconfirm="search"
-          placeholder="全网书籍搜索"
-          disabled="true"
-        />
+        <router-link to="/Search">
+          <van-search
+                  placeholder="全网书籍搜索"
+                  shape="round"
+                  :style="{background: 'rgba(0,0,0,0)',}"
+          >
+          </van-search>
+        </router-link>
       </div>
     </div>
 
@@ -77,7 +76,7 @@
         <div class="meta">
           <h3>{{book.title}}</h3>
           <span class="author">作者：{{book.author}}</span>
-          <span class="desc">{{book.desc}}</span>
+          <span class="desc">{{book.detail}}</span>
         </div>
       </van-cell>
       </router-link>
@@ -89,6 +88,8 @@
 // @ is an alias to /srcicon:
 import Api from "../api.js";
 import { Toast } from "vant";
+import '../assets/list.css';
+import '../assets/book.css';
 export default {
   name: "home",
   components: {},
@@ -125,6 +126,9 @@ export default {
     //book/search?attr=all&page=1
   },
   methods: {
+      search(){
+
+      },
     onLoad() {
       Api.getBooks('all',this.page, res => {
         for (let i = 0; i < 10; i++) {
@@ -156,126 +160,10 @@ export default {
   font-size: 14px;
 }
 
-.searchIcon {
-  position: absolute;
-  top: 0.4em;
-  left: 0.4em;
-  z-index: 20;
-  font-size: 20px;
-}
-
-.searchContainer input {
-  background: #efefef;
-  text-indent: 3em;
-  color: #333;
-  height: 2em;
-  line-height: 2em;
-  outline: none;
-  border-radius: 1em;
-  width: 99%;
-  margin: 0 auto;
-  border: 1px solid #eeeeee;
-}
-
 .placerStyle {
   color: #999;
   font: 14px;
 }
 
-.section {
-  display: inline-block;
-  background: #ffffff;
-}
-.section .head {
-  display: block;
-  float: left;
-  width: 100%;
-  background: #ffffff;
-  border: 1px solid #eeeeee;
-}
-.section .head h3 {
-  float: left;
-  margin: 0%;
-  line-height: 35px;
-  text-indent: 10px;
-  color: #000;
-}
-.section .head .more {
-  float: right;
-  line-height: 35px;
-  margin-right: 10px;
-  color: #000;
-}
-.section .body {
-  background: #ffffff;
-  display: block;
-  width: 100%;
-  float: left;
-}
-.section .body ul {
-  display: inline-block;
-}
-.section .body ul li {
-  display: inline-block;
-  width: 33.3%;
-  text-align: center;
-  /*HACK */
-}
 
-.section .body ul li .cover {
-  margin: 0 auto;
-}
-.section .body ul li > span {
-  display: block;
-  float: left;
-  text-align: center;
-  width: 100%;
-  color: #000;
-}
-
-.section .body ul li .author {
-  color: rgba(0, 0, 0, 0.3);
-  line-height: 30px;
-  font-size: 12px;
-}
-
-.book {
-  display: -webkit-box;
-  display: -ms-flexbox;
-  display: flex;
-  height: 100%;
-  font-size: 12px;
-}
-.book .cover {
-  display: block;
-  float: left;
-}
-
-.book .meta {
-  -webkit-box-flex: 1;
-  -ms-flex: 1;
-  flex: 1;
-  height: 100%;
-  padding: 5px 0;
-
-  margin-left: 110px;
-}
-.book .meta .author {
-  color: rgba(0, 0, 0, 0.3);
-  line-height: 30px;
-}
-.book .meta .desc {
-  line-height: 22px;
-  word-break: break-all;
-  -webkit-line-clamp: 3;
-  display: -webkit-box;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  -webkit-box-orient: vertical;
-
-  font-size: 12px;
-}
-.book .meta > h3 {
-  margin: 0;
-}
 </style>

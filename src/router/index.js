@@ -7,6 +7,8 @@ import Book from '../views/Book.vue'
 import Reader from '../views/Reader.vue'
 import Chapter from '../views/Chapter.vue'
 import List from '../views/List.vue'
+import Search from '../views/Search'
+import Login from '../views/Login'
 
 Vue.use(VueRouter)
 
@@ -50,6 +52,17 @@ const routes = [
     path: '/list',
     name: 'list',
     component: List
+  },
+  {
+    path: '/search',
+    name: 'search',
+    component: Search
+
+  },
+  {
+    path: '/login',
+    name: 'login',
+    component: Login
   }
   // {
   //   path: '/about',

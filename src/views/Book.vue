@@ -52,6 +52,7 @@
 <script>
 // @ is an alias to /srcicon:
 import Api from '../api.js';
+import '../assets/book.css';
 export default {
   name: "home",
   components: {},
@@ -136,45 +137,5 @@ export default {
   height: 9em;
   display: block;
   border-bottom: 1px solid #eeeeee;
-}
-
-.book {
-  display: -webkit-box;
-  display: -ms-flexbox;
-  display: flex;
-  height: 100%;
-  font-size: 12px;
-}
-.book .cover {
-  display: block;
-  float: left;
-}
-
-.book .meta {
-  -webkit-box-flex: 1;
-  -ms-flex: 1;
-  flex: 1;
-  height: 100%;
-  padding: 5px 0;
-
-  margin-left: 110px;
-}
-.book .meta .author {
-  color: rgba(0, 0, 0, 0.3);
-  line-height: 30px;
-}
-.book .meta .desc {
-  line-height: 22px;
-  word-break: break-all;
-  -webkit-line-clamp: 3;
-  display: -webkit-box;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  -webkit-box-orient: vertical;
-
-  font-size: 12px;
-}
-.book .meta > h3 {
-  margin: 0;
 }
 </style>

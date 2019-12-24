@@ -1,0 +1,56 @@
+.section {
+    display: inline-block;
+    background: #ffffff;
+  }
+  .section .head {
+    display: block;
+    float: left;
+    width: 100%;
+    background: #ffffff;
+    border: 1px solid #eeeeee;
+  }
+  .section .head h3 {
+    float: left;
+    margin: 0%;
+    line-height: 35px;
+    text-indent: 10px;
+    color: #000;
+  }
+  .section .head .more {
+    float: right;
+    line-height: 35px;
+    margin-right: 10px;
+    color: #000;
+  }
+  .section .body {
+    background: #ffffff;
+    display: block;
+    width: 100%;
+    float: left;
+  }
+  .section .body ul {
+    display: inline-block;
+  }
+  .section .body ul li {
+    display: inline-block;
+    width: 33.3%;
+    text-align: center;
+    /*HACK */
+  }
+  
+  .section .body ul li .cover {
+    margin: 0 auto;
+  }
+  .section .body ul li > span {
+    display: block;
+    float: left;
+    text-align: center;
+    width: 100%;
+    color: #000;
+  }
+  
+  .section .body ul li .author {
+    color: rgba(0, 0, 0, 0.3);
+    line-height: 30px;
+    font-size: 13px;
+  }

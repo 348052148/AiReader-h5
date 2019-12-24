@@ -25,7 +25,9 @@
         </div>
         <div class="login" v-else >
               <span class="tips">登录后使用书架</span>
+              <router-link to="/login">
               <van-button type="warning">登录</van-button>
+              </router-link>
         </div>
       </van-tab>
       <van-tab title="最近阅读">
@@ -54,7 +56,7 @@
 
 <script>
 // @ is an alias to /srcicon:
-
+import '../assets/list.css';
 export default {
   name: "home",
   components: {},
@@ -96,64 +98,5 @@ export default {
 }
 .login button {
   width: 100px;
-}
-
-.section {
-  display: inline-block;
-  background: #ffffff;
-}
-.section .head {
-  display: block;
-  float: left;
-  width: 100%;
-  background: #ffffff;
-  height: 1.5em;
-  border: 1px solid #eeeeee;
-}
-
-.section .head .edit {
-  float: left;
-  font-size: 30px;
-  line-height: 3em;
-  display: block;
-  color: #000;
-}
-.section .head .more {
-  float: right;
-  line-height: 35px;
-  margin-right: 10px;
-  color: #000;
-}
-.section .body {
-  background: #ffffff;
-  display: block;
-  width: 100%;
-  float: left;
-}
-.section .body ul {
-  display: inline-block;
-}
-.section .body ul li {
-  float: left;
-  width: 33.3%;
-  text-align: center;
-  /*HACK */
-}
-
-.section .body ul li .cover {
-  margin: 0 auto;
-}
-.section .body ul li > span {
-  display: block;
-  float: left;
-  text-align: center;
-  width: 100%;
-  color: #000;
-}
-
-.section .body ul li .author {
-  color: rgba(0, 0, 0, 0.3);
-  line-height: 30px;
-  font-size: 12px;
 }
 </style>
