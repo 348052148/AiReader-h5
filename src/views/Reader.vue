@@ -131,6 +131,7 @@ export default {
     });
     Api.getBookContents(bookId, this.chapter, res => {
       document.documentElement.scrollTop = 0;
+      document.body.scrollTop = 0;
       this.chapterContents = res.data;
       Toast.clear();
     });
@@ -143,6 +144,7 @@ export default {
       });
       Api.getBookContents(this.bookId, this.chapter + 1, res => {
         document.documentElement.scrollTop = 0;
+        document.body.scrollTop = 0;
         this.chapterContents = res.data;
         this.chapter = this.chapter + 1;
         Toast.clear();
@@ -158,6 +160,7 @@ export default {
       });
       Api.getBookContents(this.bookId, this.chapter - 1, res => {
         document.documentElement.scrollTop = 0;
+        document.body.scrollTop = 0;
         this.chapterContents = res.data;
         this.chapter = this.chapter + 1;
         Toast.clear();

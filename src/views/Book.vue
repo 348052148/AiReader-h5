@@ -3,78 +3,117 @@
     <van-nav-bar title="书籍详情" fixed left-text="返回" left-arrow @click-left="onClickLeft" />
     <div class="book-detail">
       <div class="book-head">
-        <van-image
-          class="cover"
-          width="120"
-          height="160"
-          :src="book.cover"
-        />
+        <van-image class="cover" width="120" height="160" :src="book.cover" />
       </div>
       <span class="title">{{book.title}}</span>
       <span class="author">{{book.author}}</span>
       <div class="op">
-          <router-link :to="'/reader?bookId='+book.book_id">
-              <van-button plain hairline type="danger">开始阅读</van-button>
-          </router-link>
-        
+        <router-link :to="'/reader?bookId='+book.book_id">
+          <van-button plain hairline type="danger">开始阅读</van-button>
+        </router-link>
+
         <span class="i"></span>
-        <van-button plain hairline type="primary">加入书架</van-button>
+        <van-button plain hairline type="primary" @click="joinBookShelf" :disabled="canJoinBookShelf" >加入书架</van-button>
       </div>
       <span class="desc">{{book.detail}}</span>
     </div>
-    <van-cell title="目录" icon="other-pay" is-link :value="'共'+book.chapter_count+'章'" :to="'/chapter?bookId='+book.book_id" />
+    <van-cell
+      title="目录"
+      icon="other-pay"
+      is-link
+      :value="'共'+book.chapter_count+'章'"
+      :to="'/chapter?bookId='+book.book_id"
+    />
 
-    <van-panel title="推荐"  status="换一换">
+    <van-panel title="推荐" status="换一换">
       <div>
-          <van-list v-model="loading" :error.sync="error" error-text="请求失败，点击重新加载" @load="onLoad">
-      <van-cell class="book" v-for="(index) in list" :key="index">
-        <van-image
-          class="cover"
-          width="100"
-          height="140"
-          src="http://s2.zimgs.cn/ims?kt=url&at=novel&key=aHR0cHM6Ly9ndy5hbGljZG4uY29tL0wxLzcyMy8xNTA1Mjk1MzA3LzQ4LzVjLzUwLzQ4NWM1MGZhYmY0YzEzNmY5ZGRkYzMwOWUxMjJlZmUzLmpwZw==&sign=yx:mhfWIS-vhd_C2wcePuiowWM5WOA=&tv=320_320&x.jpg"
-        />
-        <div class="meta">
-          <h3>源尊</h3>
-          <span class="author">作者：天蚕土豆</span>
-          <span
-            class="desc"
-          >天地为炉，万物为铜，阴阳为炭，造化为工。 气运之争，蟒雀吞龙。 究竟是蟒雀为尊，还是圣龙崛起，凌驾众生？ 这是气掌乾坤的世界，磅礴宏伟，一气可搬山，可倒海，可翻天，可掌阴阳乾坤。 世间源气分九品，三品称玄，六品成天，九品号圣。 吾有一口玄黄气，可吞天地日月…</span>
-        </div>
-      </van-cell>
-    </van-list>
+        <van-list v-model="loading" :error.sync="error" error-text="请求失败，点击重新加载" @load="onLoad">
+          <van-cell class="book" v-for="(index) in list" :key="index">
+            <van-image
+              class="cover"
+              width="100"
+              height="140"
+              src="http://s2.zimgs.cn/ims?kt=url&at=novel&key=aHR0cHM6Ly9ndy5hbGljZG4uY29tL0wxLzcyMy8xNTA1Mjk1MzA3LzQ4LzVjLzUwLzQ4NWM1MGZhYmY0YzEzNmY5ZGRkYzMwOWUxMjJlZmUzLmpwZw==&sign=yx:mhfWIS-vhd_C2wcePuiowWM5WOA=&tv=320_320&x.jpg"
+            />
+            <div class="meta">
+              <h3>源尊</h3>
+              <span class="author">作者：天蚕土豆</span>
+              <span
+                class="desc"
+              >天地为炉，万物为铜，阴阳为炭，造化为工。 气运之争，蟒雀吞龙。 究竟是蟒雀为尊，还是圣龙崛起，凌驾众生？ 这是气掌乾坤的世界，磅礴宏伟，一气可搬山，可倒海，可翻天，可掌阴阳乾坤。 世间源气分九品，三品称玄，六品成天，九品号圣。 吾有一口玄黄气，可吞天地日月…</span>
+            </div>
+          </van-cell>
+        </van-list>
       </div>
     </van-panel>
-    
   </div>
 </template>
 
 <script>
 // @ is an alias to /srcicon:
-import Api from '../api.js';
-import '../assets/book.css';
+import Api from "../api.js";
+import "../assets/book.css";
+import { Toast } from "vant";
+import store from "storejs";
 export default {
   name: "home",
   components: {},
   data() {
     return {
-      list:[1,2,3],
+      list: [1, 2, 3],
       error: false,
       loading: false,
-      book:{},
+      book: {},
+      canJoinBookShelf:true,
     };
   },
-  created(){
+  created() {
+    Toast.loading({
+      message: "加载中...",
+      forbidClick: true
+    });
     document.documentElement.scrollTop = 0;
+    document.body.scrollTop = 0;
     let booId = this.$route.query.bookId;
-    Api.getBook(booId,(res)=> {
-        this.book = res.data
+    Api.getBook(booId, res => {
+      this.book = res.data;
+      Toast.clear();
+      //历史浏览书籍
+      let historyBooks = store.get("historyBooks") || [];
+      let is = this.inBooks(historyBooks, this.book);
+      if (is) {
+        historyBooks.push(this.book);
+      }
+      store.set("historyBooks", historyBooks);
+
+      //加入书架
+      let bookshelf = store.get("bookshelf") || [];
+      this.canJoinBookShelf = !this.inBooks(bookshelf, this.book);
     });
   },
   methods: {
     onLoad() {},
-    onClickLeft(){
+    onClickLeft() {
       this.$router.go(-1);
+    },
+    inBooks(books, book) {
+      let is = true;
+      for (let i = 0; i < books.length; i++) {
+        if (books[i].book_id == book.book_id) {
+          is = false;
+          break;
+        }
+      }
+      return is;
+    },
+    joinBookShelf() {
+      let bookshelf = store.get("bookshelf") || [];
+      let is = this.inBooks(bookshelf, this.book);
+      if (is) {
+        bookshelf.push(this.book);
+      }
+      store.set("bookshelf", bookshelf);
+      this.canJoinBookShelf = true;
     }
   }
 };

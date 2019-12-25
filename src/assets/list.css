@@ -1,6 +1,7 @@
 .section {
     display: inline-block;
     background: #ffffff;
+    width: 100%;
   }
   .section .head {
     display: block;
@@ -30,11 +31,13 @@
   }
   .section .body ul {
     display: inline-block;
+    width: 100%;
   }
   .section .body ul li {
     display: inline-block;
     width: 33.3%;
     text-align: center;
+    padding-top:5px;
     /*HACK */
   }
   
