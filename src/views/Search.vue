@@ -31,23 +31,23 @@
       >
         <van-row>
           <van-col span="10">大家都在搜</van-col>
-          <van-col span="6" offset="8" class="action">
+          <van-col span="5" offset="9" class="action">
             <van-icon name="replay" class="icon" />换一换
           </van-col>
         </van-row>
         <div class="item">
-          <span v-for="(keyWord, index) in hotKeyWorlds" :key="index" @click="keywordSearch(keyWord)">{{keyWord}}</span>
+          <span v-for="(keyWord, index) in hotKeyWords" :key="index" @click="keywordSearch(keyWord)">{{keyWord}}</span>
         </div>
       </div>
       <div>
         <van-row>
           <van-col span="10">搜索历史</van-col>
-          <van-col span="6" offset="8" class="action">
+          <van-col  @click="clearSearchHistory" span="4" offset="10" class="action">
             <van-icon name="delete" class="icon" />清空
           </van-col>
         </van-row>
         <div class="item">
-          <span v-for="(keyWord, index) in hotKeyWorlds" :key="index"  @click="keywordSearch(keyWord)">{{keyWord}}</span>
+          <span v-for="(keyWord, index) in hotKeyWords" :key="index"  @click="keywordSearch(keyWord)">{{keyWord}}</span>
         </div>
       </div>
     </div>
@@ -71,6 +71,7 @@
 <script>
 import Api from "../api.js";
 import "../assets/book.css";
+import store from 'storejs';
 export default {
   data() {
     return {
@@ -80,8 +81,11 @@ export default {
       error: false,
       loading: false,
       finished:false,
-      hotKeyWorlds:["斗罗大陆","悲伤逆流成河"]
+      hotKeyWords:["斗罗大陆","悲伤逆流成河"]
     };
+  },
+  created(){
+      this.hotKeyWords = store.get('hotKeyWords') || [];
   },
   methods: {
     onCancel() {
@@ -89,16 +93,7 @@ export default {
       this.books = [];
     },
     onLoad() {
-      Api.searchBooks(this.searchKey, this.page, res => {
-        if (res.data.list.length <= 0) {
-            this.finished = true;
-        }
-        for (let i = 0; i < res.data.list.length; i++) {
-          this.books.push(res.data.list[i]);
-        }
-        this.loading = false;
-        this.page = this.page + 1;
-      });
+      this.searchBooks(this.searchKey, this.page);
     },
     keywordSearch(keyWord){
         this.finished  = false;
@@ -106,12 +101,35 @@ export default {
         this.page =1;
         this.books = [];
     },
+    searchBooks(searchKey, page){
+        Api.searchBooks(searchKey, page, res => {
+        if (res.data.list.length <= 0) {
+            this.finished = true;
+        }
+        for (let i = 0; i < res.data.list.length; i++) {
+          this.books.push(res.data.list[i]);
+        }
+        this.loading = false;
+        this.page = page + 1;
+      });
+    },
+    clearSearchHistory(){
+        this.hotKeyWords = [];
+        store.set('hotKeyWords',this.hotKeyWords);
+    },
     onSearch() {
       this.books = [];
       this.page  = 1;
       if (!this.searchKey) {
         return;
       }
+      //
+      this.searchBooks(this.searchKey, this.page);
+
+      if(!this.hotKeyWords.includes(this.searchKey)) {
+          this.hotKeyWords.push(this.searchKey);
+      }
+      store.set('hotKeyWords', this.hotKeyWords.slice(-10));
     },
     onClickLeft() {
       this.$router.go(-1);

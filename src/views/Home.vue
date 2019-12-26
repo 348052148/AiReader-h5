@@ -165,5 +165,8 @@ export default {
   font: 14px;
 }
 
+.van-search {
+  padding: 5px 8px;
+}
 
 </style>
