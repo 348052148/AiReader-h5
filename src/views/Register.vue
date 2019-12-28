@@ -9,8 +9,8 @@
         />
         <div style="height:46px;"></div>
         <van-row class="title">
-            <van-col span="12">手机号免注册登录</van-col>
-            <van-col span="6" offset="6" class="action">密码登录</van-col>
+            <van-col span="12">注册幽斋读书账号</van-col>
+            <van-col span="6" offset="6" class="action"></van-col>
         </van-row>
         <van-cell-group>
             <van-field
@@ -26,6 +26,20 @@
                     label="短信验证码"
                     placeholder="请输入短信验证码"
             >
+                <van-field
+                        v-model="password"
+                        label="密码"
+                        type="password"
+                        placeholder="请输入密码"
+                        :error-message="passwordMsg"
+                />
+                <van-field
+                        v-model="surePassword"
+                        type="password"
+                        label="确认密码"
+                        placeholder="请再次输入密码"
+                        :error-message="surePasswordMsg"
+                />
                 <van-button slot="button" size="small" type="primary">发送验证码</van-button>
             </van-field>
         </van-cell-group>
@@ -57,11 +71,15 @@
 
 <script>
     export default {
-        name: "Login",
+        name: "register",
         data(){
             return {
                 phone: '',
                 sms: '',
+                password: '',
+                surePassword: '',
+                passwordMsg: '',
+                surePasswordMsg: '',
                 errPhoneMsg: ''
             }
         },

@@ -10,7 +10,7 @@
         <div style="height:46px;"></div>
         <van-row class="title">
             <van-col span="12">手机号免注册登录</van-col>
-            <van-col span="6" offset="6" class="action">密码登录</van-col>
+            <van-col span="6" offset="6" class="action" v-if="type == 'login'" @click="toPwLogin">密码登录</van-col>
         </van-row>
         <van-cell-group>
             <van-field
@@ -20,6 +20,7 @@
                     :error-message="errPhoneMsg"
             />
             <van-field
+                    v-if="type != 'pwLogin'"
                     v-model="sms"
                     center
                     clearable
@@ -28,16 +29,55 @@
             >
                 <van-button slot="button" size="small" type="primary">发送验证码</van-button>
             </van-field>
+            <van-field
+                    v-if="type == 'pwLogin'"
+                    v-model="password"
+                    label="密码"
+                    type="password"
+                    placeholder="请输入密码"
+                    :error-message="passwordMsg"
+            />
         </van-cell-group>
-        <van-row class="warn">
-            <van-col span="24">登录代表您同意<span>《小灰灰读书网阅读协议》</span></van-col>
-        </van-row>
-        <div class="loginDiv">
-            <van-button type="info" size="normal" class="login">登录</van-button>
+        <div v-if="type == 'login' || type == 'pwLogin'">
+            <van-row class="warn">
+                <van-col span="24">登录代表您同意<span>《幽斋读书网阅读协议》</span></van-col>
+            </van-row>
+            <div class="loginDiv">
+                <van-button type="info" size="normal" class="login" @click="loginAction">登录</van-button>
+            </div>
+            <div class="loginDiv">
+                <span :style="{fontSize: '15px', color: '#1989fa'}" @click="toRegister">注册新账号</span>
+            </div>
         </div>
-        <div class="loginDiv">
-            <span :style="{fontSize: '15px', color: '#1989fa'}">注册新账号</span>
+        <div v-if="type == 'register'">
+            <van-field
+                    v-model="password"
+                    label="密码"
+                    type="password"
+                    placeholder="请输入密码"
+                    :error-message="passwordMsg"
+            />
+            <van-field
+                    v-model="surePassword"
+                    type="password"
+                    label="确认密码"
+                    placeholder="请再次输入密码"
+                    :error-message="surePasswordMsg"
+            />
+            <van-row class="warn">
+                <van-checkbox v-model="checked" shape="square" icon-size="15px">
+                    <van-col span="24">已阅读并同意<span>《幽斋读书网阅读协议》</span></van-col>
+                </van-checkbox>
+
+            </van-row>
+            <div class="loginDiv">
+                <van-button type="info" size="normal" class="login" @click="registerAction">注册</van-button>
+            </div>
+            <div class="loginDiv">
+                <span :style="{fontSize: '15px', color: '#1989fa'}" @click="toLogin">返回登录</span>
+            </div>
         </div>
+
         <div class="loginDiv" :style="{marginTop:'50px',}">
             <div>
                 <label class="line"></label><span :style="{margin: '0px 4px'}">更多登录方式</span><label class="line"></label>
@@ -62,10 +102,31 @@
             return {
                 phone: '',
                 sms: '',
-                errPhoneMsg: ''
+                errPhoneMsg: '',
+                type: 'login',
+                password: '',
+                surePassword: '',
+                passwordMsg: '',
+                surePasswordMsg: '',
+                checked: false,
             }
         },
         methods: {
+            toPwLogin(){
+                this.type = 'pwLogin'
+            },
+            toRegister(){
+                this.type = 'register';
+            },
+            toLogin(){
+                this.type = 'login';
+            },
+            loginAction(){
+
+            },
+            registerAction(){
+
+            },
             onClickLeft(){
                 this.$router.go(-1);
             },
@@ -83,7 +144,7 @@
         margin-bottom: 15px;
     }
     .warn{
-        padding: 0px 9px;
+        padding: 0px 15px;
         margin-top: 10px;
         font-size: 14px;
         font-weight: 200;
@@ -116,7 +177,7 @@
     .loginItem{
         display: inline-block;
         margin-top:25px;
-        margin-right: 15px;
+        width: 30%;
         height:54px;
     }
     .loginItem span{
