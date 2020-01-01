@@ -82,24 +82,28 @@ export default {
     document.body.scrollTop = 0;
     let bookId = this.$route.query.bookId;
     Api.getBook(bookId, res => {
-      this.book = res.data;
-      Toast.clear();
-      //历史浏览书籍
-      let historyBooks = store.get("historyBooks") || [];
-      let is = this.inBooks(historyBooks, this.book);
-      if (is) {
-        historyBooks.push(this.book);
-      }
-      store.set("historyBooks", historyBooks);
+      if (res.status == 200) {
+        this.book = res.data;
+        Toast.clear();
+        //历史浏览书籍
+        let historyBooks = store.get("historyBooks") || [];
+        let is = this.inBooks(historyBooks, this.book);
+        if (is) {
+          historyBooks.push(this.book);
+        }
+        store.set("historyBooks", historyBooks);
 
-      //加入书架
-      let user = store.get("user") || {};
-      if (user) {
-        Api.getBookShelf(user.user_id, res => {
-          if (res.status == 200) {
-            this.canJoinBookShelf = !this.inBooks(res.data, this.book);
-          }
-        });
+        //加入书架
+        let user = store.get("user") || {};
+        if (user) {
+          Api.getBookShelf(user.user_id, res => {
+            if (res.status == 200) {
+              this.canJoinBookShelf = !this.inBooks(res.data, this.book);
+            }
+          });
+        }
+      } else {
+        this.$router.go(-1);
       }
     });
   },

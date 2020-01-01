@@ -14,7 +14,7 @@
                 <li>
                   <van-image class="cover" width="100" height="150" :src="book.cover" />
                   <span>{{book.title}}</span>
-                  <span class="author">作者：{{book.author}}</span>
+                  <span class="author">读到：{{book.chapter_title}}</span>
                 </li>
               </router-link>
             </ul>

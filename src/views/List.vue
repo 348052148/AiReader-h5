@@ -17,7 +17,7 @@
   <div v-for="(classify,index) in classifys" :class="selectClass(classify)" :key="index" @click="selectClassify(index)" >{{classify.title}}</div>
 </div>
 
-    <van-list v-model="loading" :error.sync="error" error-text="请求失败，点击重新加载" @load="onLoad">
+    <van-list v-model="loading" finished-text="没有更多了" :error.sync="error" error-text="请求失败，点击重新加载" @load="onLoad">
       <router-link v-for="(book,index) in books" :key="index" :to="'/book?bookId='+ book.book_id">
       <van-cell class="book" >
         <van-image
@@ -101,6 +101,7 @@ export default {
       this.attr =  this.classifys[index].flag;
       this.$set(this.classifys);
 
+      this.books = [];
       Api.getBooks(this.attr,1, res => {
         this.books = res.data.list;
         this.loading = false;
