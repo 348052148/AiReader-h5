@@ -3,19 +3,18 @@
     <van-nav-bar title="书架" />
     <van-tabs v-model="active">
       <van-tab title="书架">
-        <div v-if="user.id" class="section">
-          <div class="head"></div>
+        <div v-if="user" class="section">
           <div class="body">
             <ul>
-              <li v-for="(index) in list" :key="index">
+              <li v-for="(book,index) in historybooks" :key="index">
                 <van-image
                   class="cover"
                   width="100"
                   height="150"
-                  src="http://s2.zimgs.cn/ims?kt=url&at=novel&key=aHR0cHM6Ly9ndy5hbGljZG4uY29tL0wxLzcyMy8xNTA1Mjk1MzA3LzQ4LzVjLzUwLzQ4NWM1MGZhYmY0YzEzNmY5ZGRkYzMwOWUxMjJlZmUzLmpwZw==&sign=yx:mhfWIS-vhd_C2wcePuiowWM5WOA=&tv=320_320&x.jpg"
+                  :src="book.cover"
                 />
-                <span>源尊</span>
-                <span class="author">作者：天蚕土豆</span>
+                <span>{{book.title}}</span>
+                <span class="author">作者：{{book.author}}</span>
               </li>
             </ul>
           </div>
@@ -64,7 +63,8 @@ export default {
     };
   },
   created() {
-    if (!this.user.id) {
+    this.user = store.get('user') || {}
+    if (!this.user) {
       this.active = 1;
     }
     this.historybooks = store.get("historyBooks");

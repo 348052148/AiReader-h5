@@ -5,8 +5,9 @@
     />
     <div class="userInfo">
       <img src="" onerror="this.src='http://img.zcool.cn/community/01b7645deb9963a801213853840618.png@1280w_1l_2o_100sh.png';this.onerror=null" alt="http://img.zcool.cn/community/01b7645deb9963a801213853840618.png@1280w_1l_2o_100sh.png" />
-      <span v-if="false"></span>
+      <span v-if="user"> {{user.nick_name}}</span>
       <button
+        v-else
         class="login"
         style="border:none;"
         open-type="getUserInfo"
@@ -21,14 +22,20 @@
 </template>
 
 <script>
+import store from 'storejs';
 export default {
   data(){
     return {
-
+      user:[]
     };
   },
   created() {
-    this.$router.replace("/login");
+    let user = store.get('user');
+    if (user) {
+        this.user = user;
+    }else {
+      this.$router.replace("/login");
+    }
   },
   methods:{
 
@@ -55,10 +62,11 @@ export default {
 
 .userInfo span {
   text-align: center;
-  line-height: 150px;
+  line-height: 60px;
   margin-left: 20px;
-  text-indent: 30px;
+  text-indent: 20px;
   font-weight: bold;
+  color: #000;
 }
 
 .userInfo .login {
