@@ -6,16 +6,17 @@
         <div v-if="user" class="section">
           <div class="body">
             <ul>
-              <li v-for="(book,index) in historybooks" :key="index">
-                <van-image
-                  class="cover"
-                  width="100"
-                  height="150"
-                  :src="book.cover"
-                />
-                <span>{{book.title}}</span>
-                <span class="author">作者：{{book.author}}</span>
-              </li>
+              <router-link
+                v-for="(book,index) in mybooks"
+                :key="index"
+                :to="'/reader?bookId='+book.book_id+'&chapter='+book.read_num"
+              >
+                <li>
+                  <van-image class="cover" width="100" height="150" :src="book.cover" />
+                  <span>{{book.title}}</span>
+                  <span class="author">作者：{{book.author}}</span>
+                </li>
+              </router-link>
             </ul>
           </div>
         </div>
@@ -30,8 +31,12 @@
         <div class="section">
           <div class="body">
             <ul>
-              <router-link v-for="(book,index) in historybooks" :key="index" :to="'/book?bookId='+book.book_id" >
-                <li >
+              <router-link
+                v-for="(book,index) in historybooks"
+                :key="index"
+                :to="'/book?bookId='+book.book_id"
+              >
+                <li>
                   <van-image class="cover" width="100" height="150" :src="book.cover" />
                   <span>{{book.title}}</span>
                   <span class="author">作者：{{book.author}}</span>
@@ -46,9 +51,10 @@
 </template>
 
 <script>
-// @ is an alias to /srcicon:
 import "../assets/list.css";
 import store from "storejs";
+import Api from "../api.js";
+import { Toast } from "vant";
 export default {
   name: "home",
   components: {},
@@ -63,8 +69,19 @@ export default {
     };
   },
   created() {
-    this.user = store.get('user') || {}
-    if (!this.user) {
+    this.user = store.get("user") || {};
+    if (this.user) {
+      Toast.loading({
+        message: "加载中...",
+        forbidClick: true
+      });
+      Api.getBookShelf(this.user.user_id, res => {
+        if (res.status == 200) {
+          this.mybooks = res.data;
+          Toast.clear();
+        }
+      });
+    } else {
       this.active = 1;
     }
     this.historybooks = store.get("historyBooks");

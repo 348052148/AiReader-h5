@@ -187,7 +187,7 @@ export default {
       if (this.type == "login") {
         Api.loginByPhoneCode(this.phoneNumber, this.code, res => {
           if (res.status != 200) {
-            this.errPhoneMsg = res.data;
+              this.errPhoneMsg = res.data;
           }else {
               this.loginSuccess(res.data);
           }

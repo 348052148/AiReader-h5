@@ -33,6 +33,20 @@ class Api {
                 sucessFn(response)
             })
     }
+    getBookShelf(userId, sucessFn) {
+        return axios.get(host + '/api/user/' + userId + '/bookshelf')
+            .then(function (response) {
+                sucessFn(response)
+            })
+    }
+    addBookIntoBookShelf(userId, bookId, sucessFn) {
+        return axios.post(host + '/api/user/' + userId + '/bookshelf/' + bookId, {
+            readNum: 0,
+            readOffset: 0
+        }).then(function (response) {
+            sucessFn(response)
+        })
+    }
     getClassifys(sucessFn) {
         return axios.get(host + '/api/classify/menus')
             .then(function (response) {
@@ -62,10 +76,10 @@ class Api {
         })
     }
     loginByPassword(phoneNumber, password, sucessFn) {
-        return axios.get(host + '/api/user/' + phoneNumber + '/token?password='+password)
-        .then(function (response) {
-            sucessFn(response)
-        })
+        return axios.get(host + '/api/user/' + phoneNumber + '/token?password=' + password)
+            .then(function (response) {
+                sucessFn(response)
+            })
     }
     sendValidCode(phoneNumber, sucessFn) {
         return axios.post(host + '/api/user/' + phoneNumber + '/sms/code', { a: 1 })

@@ -13,7 +13,13 @@
         </router-link>
 
         <span class="i"></span>
-        <van-button plain hairline type="primary" @click="joinBookShelf" :disabled="canJoinBookShelf" >加入书架</van-button>
+        <van-button
+          plain
+          hairline
+          type="primary"
+          @click="joinBookShelf"
+          :disabled="canJoinBookShelf"
+        >加入书架</van-button>
       </div>
       <span class="desc">{{book.detail}}</span>
     </div>
@@ -64,7 +70,7 @@ export default {
       error: false,
       loading: false,
       book: {},
-      canJoinBookShelf:true,
+      canJoinBookShelf: true
     };
   },
   created() {
@@ -74,8 +80,8 @@ export default {
     });
     document.documentElement.scrollTop = 0;
     document.body.scrollTop = 0;
-    let booId = this.$route.query.bookId;
-    Api.getBook(booId, res => {
+    let bookId = this.$route.query.bookId;
+    Api.getBook(bookId, res => {
       this.book = res.data;
       Toast.clear();
       //历史浏览书籍
@@ -87,8 +93,14 @@ export default {
       store.set("historyBooks", historyBooks);
 
       //加入书架
-      let bookshelf = store.get("bookshelf") || [];
-      this.canJoinBookShelf = !this.inBooks(bookshelf, this.book);
+      let user = store.get("user") || {};
+      if (user) {
+        Api.getBookShelf(user.user_id, res => {
+          if (res.status == 200) {
+            this.canJoinBookShelf = !this.inBooks(res.data, this.book);
+          }
+        });
+      }
     });
   },
   methods: {
@@ -107,13 +119,21 @@ export default {
       return is;
     },
     joinBookShelf() {
-      let bookshelf = store.get("bookshelf") || [];
-      let is = this.inBooks(bookshelf, this.book);
-      if (is) {
-        bookshelf.push(this.book);
+      let user = store.get("user") || {};
+      if (user) {
+        Api.addBookIntoBookShelf(user.user_id, this.book.book_id, res => {
+          if (res.status != 200) {
+            Toast.loading({
+              message: res.data
+            });
+          } else {
+            Toast.loading({
+              message: "加入书架成功"
+            });
+            this.canJoinBookShelf = true;
+          }
+        });
       }
-      store.set("bookshelf", bookshelf);
-      this.canJoinBookShelf = true;
     }
   }
 };
