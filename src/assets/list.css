@@ -48,14 +48,14 @@
   .section .body ul li .cover {
     margin: 0 auto;
   }
-  .section .body ul li > span {
+  .section .body ul li span {
     display: block;
     float: left;
     text-align: center;
     width: 100%;
     color: #000;
   }
-  .section .body ul li span > label {
+  .section .body ul li span label {
     text-align: center;
     width: 100px;
     display: inline-block;

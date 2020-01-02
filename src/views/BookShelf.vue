@@ -31,15 +31,13 @@
                           :key="key"
                           :style="{position:'relative'}"
                   >
-                    <div>
-                      <div :style="{background: 'rgb(51, 51, 51)',width: '100px', height: '150px', margin: '0 auto'}">
-                        <van-image class="cover" width="100" height="150" :src="book.cover" :style="{opacity: '0.3'}"/>
-                      </div>
-
-                      <span><label>{{book.title}}</label></span>
-                      <span class="author"><label>读到：{{book.chapter_title}}</label></span>
+                    <div :style="{background: 'rgb(51, 51, 51)',width: '100px', height: '150px', margin: '0 auto',position: 'relative'}">
+                      <van-image class="cover" width="100" height="150" :src="book.cover" :style="{opacity: '0.3'}"/>
+                      <van-checkbox :name="key"></van-checkbox>
                     </div>
-                    <van-checkbox :name="key"></van-checkbox>
+
+                    <span><label>{{book.title}}</label></span>
+                    <span class="author"><label>读到：{{book.chapter_title}}</label></span>
                   </li>
                 </van-checkbox-group>
               </ul>
@@ -170,8 +168,8 @@ export default {
   .van-checkbox{
     padding: 0 7px;
     position: absolute;
-    top: 10px;
-    left: 85px;
+    top: 5px;
+    right:3px;
     z-index: 3;
   }
   .selfAction{

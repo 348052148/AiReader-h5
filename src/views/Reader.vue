@@ -6,9 +6,9 @@
         <div class="article-action-mid" @click="switchNav" id="action_mid"></div>
       </div>
       <!-- 上面导航栏-->
-      <div id="top_nav" class="top-nav" v-if="displayNav">
+      <div id="top_nav" class="top-nav" v-if="displayNav"  @click="onClickLeft">
         <div class="icon-back"></div>
-        <div class="nav-title" @click="onClickLeft">返回书架</div>
+        <div class="nav-title">返回书架</div>
       </div>
       <!-- <div id="fiction_chapter_title"></div> -->
       <!-- 主要阅读内容-->
