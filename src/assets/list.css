@@ -2,13 +2,16 @@
     display: inline-block;
     background: #ffffff;
     width: 100%;
+  border-bottom: 20px solid #f2f2f4;
+  padding-bottom: 15px;
   }
   .section .head {
     display: block;
     float: left;
     width: 100%;
     background: #ffffff;
-    border: 1px solid #eeeeee;
+    border-bottom: 1px solid #eeeeee;
+    margin-bottom: 5px;
   }
   .section .head h3 {
     float: left;
@@ -38,6 +41,7 @@
     width: 33.3%;
     text-align: center;
     padding-top:5px;
+    vertical-align: top;
     /*HACK */
   }
   
@@ -51,9 +55,26 @@
     width: 100%;
     color: #000;
   }
+  .section .body ul li span > label {
+    text-align: center;
+    width: 100px;
+    display: inline-block;
+  }
   
   .section .body ul li .author {
     color: rgba(0, 0, 0, 0.3);
-    line-height: 30px;
     font-size: 13px;
+    margin-top:5px;
   }
+/*.section .body ul li .author > label{*/
+/*  text-align: center;*/
+/*  width: 100px;*/
+/*  display: inline-block;*/
+/*}*/
+.section_self ul{
+  margin-bottom: 50px;
+}
+.section_self {
+  border-bottom: 0px solid #f2f2f4;
+  padding-bottom: 0px;
+}

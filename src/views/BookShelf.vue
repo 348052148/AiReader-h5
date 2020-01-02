@@ -1,50 +1,90 @@
 <template>
   <div class="bookshelf">
-    <van-nav-bar title="书架" />
     <van-tabs v-model="active">
       <van-tab title="书架">
-        <div v-if="user" class="section">
-          <div class="body">
-            <ul>
-              <router-link
-                v-for="(book,index) in mybooks"
-                :key="index"
-                :to="'/reader?bookId='+book.book_id+'&chapter='+book.read_num"
-              >
-                <li>
-                  <van-image class="cover" width="100" height="150" :src="book.cover" />
-                  <span>{{book.title}}</span>
-                  <span class="author">读到：{{book.chapter_title}}</span>
-                </li>
-              </router-link>
-            </ul>
+        <div v-if="!mybooks" style="color: #7d7e80; text-align: center;height:calc(100vh - 90px);line-height: 500px;"><span>书架还是空的呢？亲快去逛逛吧！</span></div>
+        <div v-else>
+          <van-row :style="{margin: '5px 17px'}">
+            <van-col span="4" offset="20"><van-button plain type="info" size="small" @click="editShelf">{{editStatus? '完成': '编辑'}}</van-button></van-col>
+          </van-row>
+          <div v-if="user" class="section section_self" style="margin-bottom: 50px;">
+            <div class="body" v-if="!editStatus">
+              <ul>
+                <router-link
+                        v-for="(book,index) in mybooks"
+                        :key="index"
+                        :to="'/reader?bookId='+book.book_id+'&chapter='+book.read_num"
+                >
+                  <li>
+                    <van-image class="cover" width="100" height="150" :src="book.cover" />
+                    <span><label>{{book.title}}</label></span>
+                    <span class="author"><label>读到：{{book.chapter_title}}</label></span>
+                  </li>
+                </router-link>
+              </ul>
+            </div>
+            <div class="body" v-else>
+              <ul>
+                <van-checkbox-group v-model="checkedBook" ref="checkboxGroup">
+                  <li
+                          v-for="(book, key) in mybooks"
+                          :key="key"
+                          :style="{position:'relative'}"
+                  >
+                    <div>
+                      <div :style="{background: 'rgb(51, 51, 51)',width: '100px', height: '150px', margin: '0 auto'}">
+                        <van-image class="cover" width="100" height="150" :src="book.cover" :style="{opacity: '0.3'}"/>
+                      </div>
+
+                      <span><label>{{book.title}}</label></span>
+                      <span class="author"><label>读到：{{book.chapter_title}}</label></span>
+                    </div>
+                    <van-checkbox :name="key"></van-checkbox>
+                  </li>
+                </van-checkbox-group>
+              </ul>
+              <div class="selfAction">
+                <van-button plain type="primary" style="margin-right:10px;" size="small" @click="checkAll">全选</van-button>
+                <van-button plain type="info" size="small" style="margin-right:10px;" @click="toggleAll">反选</van-button>
+                <van-button plain type="info" size="small" @click="deleteShelf">删除</van-button>
+              </div>
+            </div>
+
           </div>
-        </div>
-        <div class="login" v-else>
-          <span class="tips">登录后使用书架</span>
-          <router-link to="/login">
-            <van-button type="warning">登录</van-button>
-          </router-link>
+          <div class="login" v-else>
+            <span class="tips">登录后使用书架</span>
+            <router-link to="/login">
+              <van-button type="warning">登录</van-button>
+            </router-link>
+          </div>
         </div>
       </van-tab>
       <van-tab title="最近阅读">
-        <div class="section">
-          <div class="body">
-            <ul>
-              <router-link
-                v-for="(book,index) in historybooks"
-                :key="index"
-                :to="'/book?bookId='+book.book_id"
-              >
-                <li>
-                  <van-image class="cover" width="100" height="150" :src="book.cover" />
-                  <span>{{book.title}}</span>
-                  <span class="author">作者：{{book.author}}</span>
-                </li>
-              </router-link>
-            </ul>
+        <div v-if="!historybooks" style="color: #7d7e80; text-align: center;height:calc(100vh - 90px);line-height: 500px;"><span>最近没有阅读记录，亲快去逛逛吧！</span></div>
+        <div v-else>
+          <van-row :style="{margin: '5px 17px'}">
+            <van-col span="12"></van-col>
+            <van-col span="4" offset="8"><van-button plain type="info" size="small" @click="clearShelf">清空</van-button></van-col>
+          </van-row>
+          <div class="section section_self">
+            <div class="body">
+              <ul>
+                <router-link
+                        v-for="(book,index) in historybooks"
+                        :key="index"
+                        :to="'/book?bookId='+book.book_id"
+                >
+                  <li>
+                    <van-image class="cover" width="100" height="150" :src="book.cover" />
+                    <span><label>{{book.title}}</label></span>
+                    <span class="author"><label>作者：{{book.author}}</label></span>
+                  </li>
+                </router-link>
+              </ul>
+            </div>
           </div>
         </div>
+
       </van-tab>
     </van-tabs>
   </div>
@@ -65,7 +105,9 @@ export default {
       loading: false,
       user: {},
       mybooks: [],
-      historybooks: []
+      historybooks: [],
+      editStatus: false,
+      checkedBook: [],
     };
   },
   created() {
@@ -87,6 +129,22 @@ export default {
     this.historybooks = store.get("historyBooks");
   },
   methods: {
+    clearShelf(){  //清空历史记录
+
+    },
+    checkAll() {
+      this.$refs.checkboxGroup.toggleAll(true);
+    },
+    toggleAll() {
+      this.$refs.checkboxGroup.toggleAll();
+    },
+    deleteShelf(){  //删除书架
+
+    },
+    //书架编辑
+    editShelf(){
+      this.editStatus = !this.editStatus;
+    },
     onLoad() {}
   }
 };
@@ -109,4 +167,22 @@ export default {
 .login button {
   width: 100px;
 }
+  .van-checkbox{
+    padding: 0 7px;
+    position: absolute;
+    top: 10px;
+    left: 85px;
+    z-index: 3;
+  }
+  .selfAction{
+    position: fixed;
+    width: 100%;
+    height: 50px;
+    bottom: 50px;
+    box-shadow: 0 4px 14px 0 rgba(0,0,0,0.26);
+    background: #fff;
+    text-align: center;
+    line-height: 50px;
+
+  }
 </style>

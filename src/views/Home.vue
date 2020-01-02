@@ -31,8 +31,8 @@
           <router-link v-for="(book,index) in hotBooks" :key="index" :to="'/book?bookId='+ book.book_id">
             <li >
               <van-image class="cover" width="100" height="140" :src="book.cover" />
-              <span>{{book.title}}</span>
-              <span class="author">作者：{{book.author}}</span>
+              <span><label>{{book.title}}</label></span>
+              <span class="author"><label>作者：{{book.author}}</label></span>
             </li>
           </router-link>
         </ul>
@@ -53,8 +53,8 @@
           <router-link v-for="(book,index) in recommendBooks" :key="index" :to="'/book?bookId='+ book.book_id">
             <li >
               <van-image class="cover" width="100" height="140" :src="book.cover" />
-              <span>{{book.title}}</span>
-              <span class="author">作者：{{book.author}}</span>
+              <span><label>{{book.title}}</label></span>
+              <span class="author"><label>作者：{{book.author}}</label></span>
             </li>
           </router-link>
         </ul>

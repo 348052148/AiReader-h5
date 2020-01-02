@@ -55,7 +55,7 @@ export default {
   padding-left: 20px;
   padding-bottom: 10px;
   color: #323233;
-  margin-bottom: 5px;
+  border-bottom: 3px solid #f2f2f4;
 }
 
 .userInfo img {

@@ -49,6 +49,11 @@
     </div>
     <!--底部导航栏-->
     <!--  <div class="bottom-nav-bk bottom_nav"></div> -->
+    <!--  上一章下一章-->
+    <ul class="u-table u-tab" v-if="displayNav && !displayFont">
+      <li class="prev_button" @click="prevChapter">上一章</li>
+      <li class="next_button" @click="nextChapter">下一章</li>
+    </ul>
     <div class="bottom-nav" id="bottom_nav" v-if="displayNav">
       <div class="item menu-button" id="menu_button">
         <router-link :to="'/chapter?bookId='+bookId">
@@ -64,16 +69,17 @@
           <div class="icon-text">字体</div>
         </div>
       </div>
-      <div class="item" id="night-button" style="display:none">
-        <div class="item-wrap">
-          <div class="icon-nt"></div>
-          <div class="icon-text">夜间</div>
-        </div>
-      </div>
-      <div class="item" id="daytime-button">
+
+      <div class="item" id="daytime-button" v-if="dayStyle" @click="switchStyle">
         <div class="item-wrap">
           <div class="icon-daytime"></div>
           <div class="icon-text">白天</div>
+        </div>
+      </div>
+      <div class="item" id="night-button" @click="switchStyle" v-else>
+        <div class="item-wrap">
+          <div class="icon-nt"></div>
+          <div class="icon-text">夜间</div>
         </div>
       </div>
     </div>
@@ -90,6 +96,7 @@ export default {
       displayNav: false,
       displayFont: false,
       currentStyle: "",
+      dayStyle: true,  //true 为白天模式  false 为夜间模式
       bgs: [
         {
           class: "bg1",
@@ -137,6 +144,14 @@ export default {
     });
   },
   methods: {
+    switchStyle(){  //切换模式，夜间还是白天
+      this.dayStyle = !this.dayStyle;
+      if (!this.dayStyle){
+        this.currentStyle = 'background: none rgb(0, 0, 0);';
+      }else{
+        this.currentStyle = 'background: rgb(255, 255, 255);';
+      }
+    },
     nextChapter() {
       Toast.loading({
         message: "加载中...",
@@ -248,7 +263,13 @@ body {
   background: #000;
   opacity: 0.9;
 }
-
+.u-table{
+  border-radius: 0px;
+  margin: 0 0;
+  position: fixed;
+  width: 100%;
+  bottom: 70px;
+}
 .u-tab li {
   list-style: none;
   display: inline-block;
@@ -413,7 +434,7 @@ body {
 }
 
 .item {
-  width: 120px;
+  width: 27%;
   height: 100%;
   margin-right: 15px;
   float: left;
