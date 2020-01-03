@@ -59,7 +59,7 @@
 // @ is an alias to /srcicon:
 import Api from "../api.js";
 import "../assets/book.css";
-import { Toast } from "vant";
+import { Toast,Notify } from "vant";
 import store from "storejs";
 export default {
   name: "home",
@@ -103,7 +103,7 @@ export default {
           });
         }
       } else {
-        this.$router.go(-1);
+        this.$router.go(-1)
       }
     });
   },
@@ -131,9 +131,7 @@ export default {
               message: res.data
             });
           } else {
-            Toast.loading({
-              message: "加入书架成功"
-            });
+            Notify({ type: 'success', message: '加入书架成功！' });
             this.canJoinBookShelf = true;
           }
         });

@@ -3,6 +3,7 @@
     <van-nav-bar
       title="目录"
       left-text="返回"
+      fixed
       left-arrow
       @click-left="onClickLeft"
     />
@@ -28,6 +29,7 @@ export default {
       loading: false,
       bookId:'',
       chapters:[],
+      page:1,
       isfinish:false,
     };
   },
@@ -36,9 +38,15 @@ export default {
   },
   methods:{
     onLoad(){
-      Api.getBookChapters(this.bookId, (res)=>{
-        this.chapters = res.data;
-        this.isfinish = true;
+      Api.getBookChapters(this.bookId,this.page, res=>{
+        for(let i =0; i < res.data.count; i++) {
+          this.chapters.push(res.data.list[i]);
+        }
+        if (res.data.count == 0) {
+          this.isfinish = true;
+        }
+        this.loading = false;
+        this.page = this.page+1;
       })
     },
     onClickLeft(){
@@ -47,3 +55,9 @@ export default {
   }
 };
 </script>
+
+<style scoped>
+.chapterContainer {
+  margin-top: 50px;
+}
+</style>

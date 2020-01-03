@@ -26,9 +26,9 @@ class Api {
                 sucessFn(response)
             })
     }
-    getBookChapters(bookId, sucessFn) {
+    getBookChapters(bookId, page, sucessFn) {
         //book/bc688ee6e68f9209d1153bfabd861537/chapters
-        return axios.get(host + '/api/book/' + bookId + '/chapters')
+        return axios.get(host + '/api/book/' + bookId + '/chapters?page='+page)
             .then(function (response) {
                 sucessFn(response)
             })
@@ -46,6 +46,12 @@ class Api {
         }).then(function (response) {
             sucessFn(response)
         })
+    }
+    removeBooksFromBookShelf(userId, bookIds, sucessFn) {
+        return axios.delete(host + '/api/user/' + userId + '/bookshelf/books/'+ bookIds.join(','))
+        .then(function (response) {
+            sucessFn(response)
+        })    
     }
     getClassifys(sucessFn) {
         return axios.get(host + '/api/classify/menus')
