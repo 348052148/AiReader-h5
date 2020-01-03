@@ -14,10 +14,12 @@ class Api {
                 sucessFn(response)
             })
     }
-    getBook(bookId, sucessFn) {
+    getBook(bookId, sucessFn, catchFn) {
         return axios.get(host + '/api/book/' + bookId)
             .then(function (response) {
                 sucessFn(response)
+            }).catch(function(){
+                catchFn()
             })
     }
     getBookContents(bookId, chapter, sucessFn) {

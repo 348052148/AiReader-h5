@@ -103,8 +103,14 @@ export default {
           });
         }
       } else {
-        this.$router.go(-1)
+        this.$router.go(-1);
       }
+    },()=>{
+      Toast.clear();
+       Notify({ type: 'warning', message: '书籍不存在！' });
+      setTimeout(()=>{
+        this.$router.go(-1);
+      },1000);
     });
   },
   methods: {
