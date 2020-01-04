@@ -14,7 +14,7 @@
       </view>
 
       <van-list v-model="loading" @load="onLoad" :finished="isfinish">
-        <van-cell v-for="(chapter,item) in chapters" :key="item" is-link :to="'/reader?bookId='+bookId+'&chapter='+chapter.index" :title="chapter.title" />
+        <van-cell v-for="(chapter,item) in chapters" :key="item" is-link :to="'/reader?bookId='+bookId+'&chapter='+chapter.index+'&bookName='+ bookName" :title="chapter.title" />
       </van-list>
     </div>
   </div>
@@ -28,6 +28,7 @@ export default {
       error: false,
       loading: false,
       bookId:'',
+      bookName: '',
       chapters:[],
       page:1,
       isfinish:false,
@@ -35,17 +36,18 @@ export default {
   },
   created(){
     this.bookId = this.$route.query.bookId;
+    this.bookName = this.$route.query.bookName;
   },
   methods:{
     onLoad(){
-      Api.getBookChapters(this.bookId,this.page, res=>{
-        for(let i =0; i < res.data.count; i++) {
-          this.chapters.push(res.data.list[i]);
-        }
-        if (res.data.count == 0) {
-          this.isfinish = true;
-        }
-        this.loading = false;
+      Api.getBookChapters(this.bookId,this.page,  res=>{
+          for(let i =0; i < res.data.count; i++) {
+            this.chapters.push(res.data.list[i]);
+          }
+          if (res.data.count == 0) {
+            this.isfinish = true;
+          }
+          this.loading = false;
         this.page = this.page+1;
       })
     },

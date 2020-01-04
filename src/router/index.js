@@ -10,6 +10,7 @@ import List from '../views/List.vue'
 import Search from '../views/Search'
 import Login from '../views/Login'
 import Register from '../views/Register'
+import Setting from '../views/Setting'
 
 Vue.use(VueRouter)
 
@@ -68,7 +69,12 @@ const routes = [
   {
     path: '/register',
     name: 'register',
-    components: Register
+    component: Register
+  },
+  {
+    path: '/setting',
+    name: 'setting',
+    component: Setting
   }
   // {
   //   path: '/about',

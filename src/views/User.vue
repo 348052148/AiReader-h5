@@ -9,19 +9,17 @@
         <img src="" onerror="this.src='http://img.zcool.cn/community/01b7645deb9963a801213853840618.png@1280w_1l_2o_100sh.png';this.onerror=null" alt="http://img.zcool.cn/community/01b7645deb9963a801213853840618.png@1280w_1l_2o_100sh.png" />
       </van-col>
       <van-col span="19" style="line-height: 60px;">
-        <label v-if="user">{{user.nick_name}}</label>
+        <label v-if="Object.keys(user).length > 0">{{user.nick_name}}</label>
         <button v-else
                 class="login"
                 style="border:none;"
                 open-type="getUserInfo"
                 lang="zh_CN"
-                bindgetuserinfo="login"
+                @click="login"
         >请点击登陆</button>
       </van-col>
     </van-row>
-    <van-cell title="设置" icon="shop-o" is-link />
-    <van-cell title="联系我们" icon="phone-circle-o" is-link />
-    <van-cell title="帮助中心" icon="more-o" is-link />
+    <router-link to="/setting"><van-cell title="设置" icon="setting-o" is-link /></router-link>
   </div>
 </template>
 
@@ -42,7 +40,9 @@ export default {
     }
   },
   methods:{
-
+    login(){
+      this.$router.replace('/login')
+    },
   }
 }
 </script>

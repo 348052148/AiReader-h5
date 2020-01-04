@@ -78,3 +78,26 @@
   border-bottom: 0px solid #f2f2f4;
   padding-bottom: 0px;
 }
+/*头部的返回导航栏*/
+.top-nav {
+  position: fixed;
+  top: 0px;
+  height: 50px;
+  width: 100%;
+  z-index: 9999;
+  background: #d5d5d6;
+  line-height: 50px;
+}
+
+.icon-back {
+  vertical-align: middle;
+  margin-right: 5px;
+}
+
+.nav-title {
+  display: inline-block;
+  vertical-align: middle;
+}
+.back-content{
+  margin-top: 50px;
+}

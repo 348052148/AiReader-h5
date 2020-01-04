@@ -3,7 +3,7 @@
     <van-tabs v-model="active">
       <van-tab title="书架">
         <div
-          v-if="!mybooks"
+          v-if="mybooks.length < 1"
           style="color: #7d7e80; text-align: center;height:calc(100vh - 90px);line-height: 500px;"
         >
           <span>书架还是空的呢？亲快去逛逛吧！</span>
@@ -25,7 +25,7 @@
                 <router-link
                   v-for="(book,index) in mybooks"
                   :key="index"
-                  :to="'/reader?bookId='+book.book_id+'&chapter='+book.read_num"
+                  :to="'/reader?bookId='+book.book_id+'&chapter='+book.read_num+'&bookName='+ book.title"
                 >
                   <li>
                     <van-image class="cover" width="100" height="150" :src="book.cover" />
@@ -94,7 +94,7 @@
       </van-tab>
       <van-tab title="最近阅读">
         <div
-          v-if="!historybooks"
+          v-if="historybooks.length < 1"
           style="color: #7d7e80; text-align: center;height:calc(100vh - 90px);line-height: 500px;"
         >
           <span>最近没有阅读记录，亲快去逛逛吧！</span>

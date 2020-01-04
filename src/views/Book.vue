@@ -8,7 +8,7 @@
       <span class="title">{{book.title}}</span>
       <span class="author">{{book.author}}</span>
       <div class="op">
-        <router-link :to="'/reader?bookId='+book.book_id">
+        <router-link :to="'/reader?bookId='+book.book_id+'&bookName='+book.title">
           <van-button plain hairline type="danger">开始阅读</van-button>
         </router-link>
 
@@ -130,7 +130,7 @@ export default {
     },
     joinBookShelf() {
       let user = store.get("user") || {};
-      if (user) {
+      if (Object.keys(user).length > 0) {
         Api.addBookIntoBookShelf(user.user_id, this.book.book_id, res => {
           if (res.status != 200) {
             Toast.loading({
@@ -141,6 +141,8 @@ export default {
             this.canJoinBookShelf = true;
           }
         });
+      }else{ //跳出提示框，并且引导用户进行登录
+
       }
     }
   }
