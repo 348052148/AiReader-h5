@@ -55,6 +55,14 @@ class Api {
             sucessFn(response)
         })    
     }
+    updateBookFromBookShelf(userId, bookId, chapter , sucessFn){
+        return axios.put(host + '/api/user/' + userId + '/bookshelf/' + bookId, {
+            readNum: chapter,
+            readOffset: 0
+        }).then(function (response) {
+            sucessFn(response)
+        })
+    }
     getClassifys(sucessFn) {
         return axios.get(host + '/api/classify/menus')
             .then(function (response) {

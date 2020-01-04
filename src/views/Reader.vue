@@ -56,7 +56,7 @@
     </ul>
     <div class="bottom-nav" id="bottom_nav" v-if="displayNav">
       <div class="item menu-button" id="menu_button">
-        <router-link :to="'/chapter?bookId='+bookId+'&bookName=' + bookName">
+        <router-link :to="'/chapter?bookId='+bookId+'&bookName=' + bookName" replace >
           <div class="item-wrap">
             <div class="icon-menu"></div>
             <div class="icon-text">目录</div>
@@ -88,7 +88,8 @@
 
 <script>
 import Api from "../api.js";
-import { Toast } from "vant";
+import store from "storejs";
+import { Toast,Notify } from "vant";
 export default {
   data() {
     return {
@@ -122,7 +123,8 @@ export default {
       chapterContents: {},
       chapter: 0,
       bookId: "",
-      bookName: ''
+      bookName: '',
+      user:{}
     };
   },
   created() {
@@ -135,18 +137,31 @@ export default {
     } else {
        this.chapter = 0;
     }
-    Toast.loading({
-      message: "加载中...",
-      forbidClick: true
-    });
-    Api.getBookContents(bookId, this.chapter, res => {
-      document.documentElement.scrollTop = 0;
-      document.body.scrollTop = 0;
-      this.chapterContents = res.data;
-      Toast.clear();
-    });
+    this.user = store.get('user') || false;
+    this.getChapterContents(bookId, this.chapter);
   },
   methods: {
+    getChapterContents(bookId, page){
+      Toast.loading({
+        message: "加载中...",
+        forbidClick: true
+      });
+      Api.getBookContents(bookId, page, res => {
+        document.documentElement.scrollTop = 0;
+        document.body.scrollTop = 0;
+        this.chapterContents = res.data;
+        Toast.clear();
+      });
+
+      if (this.user) {
+        Api.updateBookFromBookShelf(this.user.user_id, bookId, page, (res) => {
+            if (res.status != 200) {
+                Notify({ type: 'danger', message:res.data});
+            }
+        });
+      }
+      
+    },
     switchStyle(){  //切换模式，夜间还是白天
       this.dayStyle = !this.dayStyle;
       if (!this.dayStyle){
@@ -156,33 +171,16 @@ export default {
       }
     },
     nextChapter() {
-      Toast.loading({
-        message: "加载中...",
-        forbidClick: true
-      });
-      Api.getBookContents(this.bookId, this.chapter + 1, res => {
-        document.documentElement.scrollTop = 0;
-        document.body.scrollTop = 0;
-        this.chapterContents = res.data;
-        this.chapter = this.chapter + 1;
-        Toast.clear();
-      });
+      this.getChapterContents(this.bookId, this.chapter + 1);
+      this.chapter = this.chapter + 1;
     },
     prevChapter() {
       if (this.chapter <= 0) {
-        alert("已是第一章了");
+        Notify({ type: 'danger', message:'已经是第一章了'});
+        return false;
       }
-      Toast.loading({
-        message: "加载中...",
-        forbidClick: true
-      });
-      Api.getBookContents(this.bookId, this.chapter - 1, res => {
-        document.documentElement.scrollTop = 0;
-        document.body.scrollTop = 0;
-        this.chapterContents = res.data;
-        this.chapter = this.chapter + 1;
-        Toast.clear();
-      });
+      this.getChapterContents(this.bookId, this.chapter - 1);
+      this.chapter = this.chapter - 1;
     },
 
     onClickLeft(){

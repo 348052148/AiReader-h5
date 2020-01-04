@@ -24,8 +24,14 @@
           class="cover"
           width="100"
           height="140"
-          :src="book.cover"
-        />
+          :src="getbookImg(book.book_id)"
+          :show-loading="true"
+          :error="'this.src=\''+book.cover+'\''"
+        >
+          <template v-slot:loading>
+            <van-loading type="spinner" size="20" />
+          </template>
+        </van-image>
         <div class="meta">
           <h3>{{book.title}}</h3>
           <span class="author">作者：{{book.author}}</span>
@@ -118,6 +124,12 @@ export default {
     },
     onClickLeft(){
       this.$router.go(-1);
+    },
+    getbookImg(bookId) {
+      if (!bookId) {
+        return false;
+      }
+      return "https://api.rbxgg.cn/book/image/" + bookId + ".jpeg";
     }
   }
 };

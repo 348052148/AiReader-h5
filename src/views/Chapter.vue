@@ -14,7 +14,7 @@
       </view>
 
       <van-list v-model="loading" @load="onLoad" :finished="isfinish">
-        <van-cell v-for="(chapter,item) in chapters" :key="item" is-link :to="'/reader?bookId='+bookId+'&chapter='+chapter.index+'&bookName='+ bookName" :title="chapter.title" />
+        <van-cell v-for="(chapter,item) in chapters" :key="item" is-link :to="'/reader?bookId='+bookId+'&chapter='+chapter.index+'&bookName='+ bookName" :replace="true" :title="chapter.title" />
       </van-list>
     </div>
   </div>

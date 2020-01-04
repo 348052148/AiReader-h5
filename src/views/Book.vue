@@ -3,7 +3,17 @@
     <van-nav-bar title="书籍详情" fixed left-text="返回" left-arrow @click-left="onClickLeft" />
     <div class="book-detail">
       <div class="book-head">
-        <van-image class="cover" width="120" height="160" :src="book.cover" />
+        <van-image
+          class="cover"
+          width="120"
+          height="160"
+          :src="getbookImg(book.book_id)"
+          :show-loading="true"
+        >
+          <template v-slot:loading>
+            <van-loading type="spinner" size="20" />
+          </template>
+        </van-image>
       </div>
       <span class="title">{{book.title}}</span>
       <span class="author">{{book.author}}</span>
@@ -59,7 +69,7 @@
 // @ is an alias to /srcicon:
 import Api from "../api.js";
 import "../assets/book.css";
-import { Toast,Notify } from "vant";
+import { Toast, Notify } from "vant";
 import store from "storejs";
 export default {
   name: "home",
@@ -81,37 +91,41 @@ export default {
     document.documentElement.scrollTop = 0;
     document.body.scrollTop = 0;
     let bookId = this.$route.query.bookId;
-    Api.getBook(bookId, res => {
-      if (res.status == 200) {
-        this.book = res.data;
-        Toast.clear();
-        //历史浏览书籍
-        let historyBooks = store.get("historyBooks") || [];
-        let is = this.inBooks(historyBooks, this.book);
-        if (is) {
-          historyBooks.push(this.book);
-        }
-        store.set("historyBooks", historyBooks);
+    Api.getBook(
+      bookId,
+      res => {
+        if (res.status == 200) {
+          this.book = res.data;
+          Toast.clear();
+          //历史浏览书籍
+          let historyBooks = store.get("historyBooks") || [];
+          let is = this.inBooks(historyBooks, this.book);
+          if (is) {
+            historyBooks.push(this.book);
+          }
+          store.set("historyBooks", historyBooks);
 
-        //加入书架
-        let user = store.get("user") || {};
-        if (user) {
-          Api.getBookShelf(user.user_id, res => {
-            if (res.status == 200) {
-              this.canJoinBookShelf = !this.inBooks(res.data, this.book);
-            }
-          });
+          //加入书架
+          let user = store.get("user") || {};
+          if (user) {
+            Api.getBookShelf(user.user_id, res => {
+              if (res.status == 200) {
+                this.canJoinBookShelf = !this.inBooks(res.data, this.book);
+              }
+            });
+          }
+        } else {
+          this.$router.go(-1);
         }
-      } else {
-        this.$router.go(-1);
+      },
+      () => {
+        Toast.clear();
+        Notify({ type: "warning", message: "书籍不存在！" });
+        setTimeout(() => {
+          this.$router.go(-1);
+        }, 1000);
       }
-    },()=>{
-      Toast.clear();
-       Notify({ type: 'warning', message: '书籍不存在！' });
-      setTimeout(()=>{
-        this.$router.go(-1);
-      },1000);
-    });
+    );
   },
   methods: {
     onLoad() {},
@@ -137,13 +151,19 @@ export default {
               message: res.data
             });
           } else {
-            Notify({ type: 'success', message: '加入书架成功！' });
+            Notify({ type: "success", message: "加入书架成功！" });
             this.canJoinBookShelf = true;
           }
         });
-      }else{ //跳出提示框，并且引导用户进行登录
-
+      } else {
+        //跳出提示框，并且引导用户进行登录
       }
+    },
+    getbookImg(bookId) {
+      if (!bookId) {
+        return false;
+      }
+      return "https://api.rbxgg.cn/book/image/" + bookId + ".jpeg";
     }
   }
 };

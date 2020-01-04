@@ -23,7 +23,7 @@
                 this.$router.replace({ path: `/user` });
             },
             exitLogin(){  //退出登录
-                store.set('user', {});
+                store.set('user', false);
                 this.$router.replace('/login');
             },
         },
