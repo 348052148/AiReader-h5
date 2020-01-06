@@ -15,7 +15,7 @@
 
 <script>
     import store from "storejs";
-
+    import Api from '../api.js';
     export default {
         name: "Setting",
         methods: {
@@ -23,8 +23,12 @@
                 this.$router.replace({ path: `/user` });
             },
             exitLogin(){  //退出登录
-                store.set('user', false);
-                this.$router.replace('/login');
+                Api.logout((res) => {
+                    if (res.status == 200) {
+                        store.set('user', false);
+                        this.$router.replace('/login');
+                    }
+                })
             },
         },
     }

@@ -154,7 +154,7 @@ export default {
       });
 
       if (this.user) {
-        Api.updateBookFromBookShelf(this.user.user_id, bookId, page, (res) => {
+        Api.updateBookFromBookShelf(bookId, page, (res) => {
             if (res.status != 200) {
                 Notify({ type: 'danger', message:res.data});
             }

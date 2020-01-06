@@ -160,9 +160,9 @@ export default {
         message: "加载中...",
         forbidClick: true
       });
-      Api.getBookShelf(this.user.user_id, res => {
+      Api.getBookShelf( (res) => {
         if (res.status == 200) {
-          this.mybooks = res.data;
+          this.mybooks = res.data.books;
           Toast.clear();
         }
       });
@@ -186,15 +186,15 @@ export default {
     },
     deleteShelf() {
       //删除书架
-      Api.removeBooksFromBookShelf(this.user.user_id, this.checkedBook, res => {
+      Api.removeBooksFromBookShelf(this.checkedBook, res => {
         if (res.status != 200) {
           Notify({ type: 'danger', message: res.data });
         } else {
           Notify({ type: 'success', message: '删除成功！' });
           //重新获取书架
-          Api.getBookShelf(this.user.user_id, res => {
+          Api.getBookShelf( res => {
             if (res.status == 200) {
-              this.mybooks = res.data;
+              this.mybooks = res.data.books;
               Toast.clear();
             }
           });

@@ -108,7 +108,7 @@
 <script>
 import Api from "../api.js";
 import { Toast } from "vant";
-import store from 'storejs';
+import store from "storejs";
 export default {
   name: "Login",
   data() {
@@ -169,9 +169,10 @@ export default {
       });
     },
     //登陆
-    loginSuccess(user){
-        store.set('user', user);
-        this.$router.replace('/user');
+    loginSuccess(user, token) {
+      store.set("user", user);
+      store.set("api_token", token);
+      this.$router.replace("/user");
     },
     loginAction() {
       if (!this.phoneNumber) {
@@ -187,9 +188,9 @@ export default {
       if (this.type == "login") {
         Api.loginByPhoneCode(this.phoneNumber, this.code, res => {
           if (res.status != 200) {
-              this.errPhoneMsg = res.data;
-          }else {
-              this.loginSuccess(res.data);
+            this.errPhoneMsg = res.data.message;
+          } else {
+            this.loginSuccess(res.data.user, res.data.token);
           }
           Toast.clear();
         });
@@ -199,9 +200,9 @@ export default {
         }
         Api.loginByPassword(this.phoneNumber, this.password, res => {
           if (res.status != 200) {
-            this.passwordMsg = res.data;
-          }else {
-              this.loginSuccess(res.data);
+            this.passwordMsg = res.data.message;
+          } else {
+            this.loginSuccess(res.data.user, res.data.token);
           }
           Toast.clear();
         });
@@ -227,9 +228,9 @@ export default {
         this.surePassword,
         res => {
           if (res.status != 200) {
-            this.errPhoneMsg = res.data.msg;
+            this.errPhoneMsg = res.data.message;
           } else {
-              this.loginSuccess(res.data);
+            this.loginSuccess(res.data.user, res.data.token);
           }
           Toast.clear();
         }

@@ -108,9 +108,9 @@ export default {
           //加入书架
           let user = store.get("user") || {};
           if (user) {
-            Api.getBookShelf(user.user_id, res => {
+            Api.getBookShelf((res) => {
               if (res.status == 200) {
-                this.canJoinBookShelf = !this.inBooks(res.data, this.book);
+                this.canJoinBookShelf = !this.inBooks(res.data.books, this.book);
               }
             });
           }
@@ -145,7 +145,7 @@ export default {
     joinBookShelf() {
       let user = store.get("user") || {};
       if (Object.keys(user).length > 0) {
-        Api.addBookIntoBookShelf(user.user_id, this.book.book_id, res => {
+        Api.addBookIntoBookShelf(this.book.book_id, res => {
           if (res.status != 200) {
             Toast.loading({
               message: res.data
@@ -161,7 +161,7 @@ export default {
     },
     getbookImg(bookId) {
       if (!bookId) {
-        return false;
+        return '';
       }
       return "https://api.rbxgg.cn/book/image/" + bookId + ".jpeg";
     }
