@@ -106,17 +106,17 @@
       <router-link v-for="(book,index) in books" :key="index" :to="'/book?bookId='+ book.book_id">
         <van-cell class="book">
           <van-image
-                class="cover"
-                width="100"
-                height="140"
-                :src="getbookImg(book.book_id)"
-                :show-loading="true"
-                :error="book.cover"
-              >
-                <template v-slot:loading>
-                  <van-loading type="spinner" size="20" />
-                </template>
-              </van-image>
+            class="cover"
+            width="100"
+            height="140"
+            :src="getbookImg(book.book_id)"
+            :show-loading="true"
+            :error="book.cover"
+          >
+            <template v-slot:loading>
+              <van-loading type="spinner" size="20" />
+            </template>
+          </van-image>
           <div class="meta">
             <h3>{{book.title}}</h3>
             <span class="author">作者：{{book.author}}</span>
@@ -134,16 +134,12 @@ import Api from "../api.js";
 import { Toast } from "vant";
 import "../assets/list.css";
 import "../assets/book.css";
+import store from "storejs";
 export default {
   name: "home",
   components: {},
   data() {
     return {
-      images: [
-        "https://gw.alicdn.com/L1/723/1559622921/7b/06/03/7b06031349b594432e34c9e4704b4ee9.png",
-        "https://gw.alicdn.com/L1/723/1557815538/39/94/0a/39940a428e1efd6cc35b8b46b90e41aa.jpg"
-      ],
-      list: [1, 2, 4, 5, 6],
       error: false,
       loading: false,
       finished: false,
@@ -155,18 +151,31 @@ export default {
     };
   },
   created() {
-    Toast.loading({
-      message: "加载中...",
-      forbidClick: true
-    });
-    Api.getHomeBooks(res => {
-      this.hotBooks = res.data.hot;
-      this.recommendBooks = res.data.recommend;
-      this.bannars = res.data.bannars;
-      setTimeout(() => {
-        Toast.clear();
-      }, 200);
-    });
+    let home = store.get("home") || false;
+    if (!home) {
+      Toast.loading({
+        message: "加载中...",
+        forbidClick: true
+      });
+      Api.getHomeBooks(res => {
+        this.hotBooks = res.data.hot;
+        this.recommendBooks = res.data.recommend;
+        this.bannars = res.data.bannars;
+        setTimeout(() => {
+          store.set("home", {
+            hotBooks: res.data.hot,
+            recommendBooks: res.data.recommend,
+            bannars: res.data.bannars
+          });
+          Toast.clear();
+        }, 200);
+      });
+    } else {
+      this.hotBooks = home.hotBooks;
+      this.recommendBooks = home.recommendBooks;
+      this.bannars = home.bannars;
+    }
+
     //book/search?attr=all&page=1
   },
   methods: {
@@ -182,7 +191,7 @@ export default {
     },
     getbookImg(bookId) {
       if (!bookId) {
-        return false;
+        return '';
       }
       return "https://api.rbxgg.cn/book/image/" + bookId + ".jpeg";
     }

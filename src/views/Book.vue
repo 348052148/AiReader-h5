@@ -38,7 +38,7 @@
       icon="other-pay"
       is-link
       :value="'共'+book.chapter_count+'章'"
-      :to="'/chapter?bookId='+book.book_id"
+      :to="'/chapter?bookId='+book.book_id+'&bookName='+book.title"
     />
 
     <van-panel title="推荐" status="换一换">
@@ -161,7 +161,7 @@ export default {
     },
     getbookImg(bookId) {
       if (!bookId) {
-        return '';
+        return false;
       }
       return "https://api.rbxgg.cn/book/image/" + bookId + ".jpeg";
     }

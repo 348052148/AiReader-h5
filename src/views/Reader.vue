@@ -20,7 +20,7 @@
       </div>
     </div>
     <!-- 控制章节的按钮-->
-    <div class="m-button-bar">
+    <div  v-if="chapterContents.title" class="m-button-bar">
       <ul class="u-tab">
         <li id="prev_button" @click="prevChapter">上一章</li>
         <li id="next_button" @click="nextChapter">下一章</li>
@@ -143,6 +143,7 @@ export default {
   methods: {
     getChapterContents(bookId, page){
       Toast.loading({
+        duration:0,
         message: "加载中...",
         forbidClick: true
       });

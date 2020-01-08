@@ -5,6 +5,12 @@ var host = 'https://api.rbxgg.cn';
 class Api {
     constructor() {
         this.apiToken = store.get('api_token');
+        axios.defaults.headers.common['Authorization'] = 'Bearer ' + this.apiToken;
+        axios.defaults.headers.common['Accept'] = 'application/json';
+    }
+    setToken(){
+        this.apiToken = store.get('api_token');
+        axios.defaults.headers.common['Authorization'] = 'Bearer ' + this.apiToken;
     }
     getHomeBooks(sucessFn) {
         return axios.get(host + '/api/home/books')
@@ -42,13 +48,13 @@ class Api {
 
     //书架操作
     getBookShelf(sucessFn) {
-        return axios.get(host + '/api/bookshelf?api_token='+this.apiToken)
+        return axios.get(host + '/api/bookshelf')
             .then(function (response) {
                 sucessFn(response)
             })
     }
     addBookIntoBookShelf( bookId, sucessFn) {
-        return axios.post(host + '/api/bookshelf/' + bookId + '?api_token='+this.apiToken, {
+        return axios.post(host + '/api/bookshelf/' + bookId, {
             readNum: 0,
             readOffset: 0
         }).then(function (response) {
@@ -56,13 +62,13 @@ class Api {
         })
     }
     removeBooksFromBookShelf(bookIds, sucessFn) {
-        return axios.delete(host + '/api/bookshelf/books/'+ bookIds.join(',') + '?api_token='+this.apiToken)
+        return axios.delete(host + '/api/bookshelf/books/'+ bookIds.join(','))
         .then(function (response) {
             sucessFn(response)
         })    
     }
     updateBookFromBookShelf(bookId, chapter , sucessFn){
-        return axios.put(host + '/api/bookshelf/' + bookId + '?api_token='+this.apiToken, {
+        return axios.put(host + '/api/bookshelf/' + bookId, {
             readNum: chapter,
             readOffset: 0
         }).then(function (response) {

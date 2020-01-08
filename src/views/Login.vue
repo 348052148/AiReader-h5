@@ -76,7 +76,7 @@
         </van-checkbox>
       </van-row>
       <div class="loginDiv">
-        <van-button type="info" size="normal" class="login" @click="registerAction">注册</van-button>
+        <van-button type="info" :disabled="!checked" size="normal" class="login" @click="registerAction">注册</van-button>
       </div>
       <div class="loginDiv">
         <span :style="{fontSize: '15px', color: '#1989fa'}" @click="toLogin">返回登录</span>
@@ -138,7 +138,7 @@ export default {
       this.type = "login";
     },
     isPoneAvailable(poneInput) {
-      var myreg = /^[1][3,4,5,7,8][0-9]{9}$/;
+      var myreg = /^[1][3,4,5,7,8,9][0-9]{9}$/;
       if (!myreg.test(poneInput)) {
         return false;
       } else {
@@ -172,6 +172,7 @@ export default {
     loginSuccess(user, token) {
       store.set("user", user);
       store.set("api_token", token);
+      Api.setToken();
       this.$router.replace("/user");
     },
     loginAction() {

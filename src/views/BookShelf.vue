@@ -28,7 +28,19 @@
                   :to="'/reader?bookId='+book.book_id+'&chapter='+book.read_num+'&bookName='+ book.title"
                 >
                   <li>
-                    <van-image class="cover" width="100" height="150" :src="book.cover" />
+                    <van-image
+                      class="cover"
+                      width="100"
+                      height="150"
+                      :src="getbookImg(book.book_id)"
+                      :show-loading="true"
+                      :error="book.cover"
+                    >
+                      <template v-slot:loading>
+                        <van-loading type="spinner" size="20" />
+                      </template>
+                    </van-image>
+
                     <span>
                       <label>{{book.title}}</label>
                     </span>
@@ -137,7 +149,7 @@
 import "../assets/list.css";
 import store from "storejs";
 import Api from "../api.js";
-import { Toast,Notify } from "vant";
+import { Toast, Notify } from "vant";
 export default {
   name: "home",
   components: {},
@@ -154,13 +166,13 @@ export default {
     };
   },
   created() {
-    this.user = store.get("user") || {};
+    this.user = store.get("user") || false;
     if (this.user) {
       Toast.loading({
         message: "加载中...",
         forbidClick: true
       });
-      Api.getBookShelf( (res) => {
+      Api.getBookShelf(res => {
         if (res.status == 200) {
           this.mybooks = res.data.books;
           Toast.clear();
@@ -169,14 +181,14 @@ export default {
     } else {
       this.active = 1;
     }
-    this.historybooks = store.get("historyBooks");
+    this.historybooks = store.get("historyBooks") || [];
   },
   methods: {
     clearShelf() {
       //清空历史记录
       this.historybooks = [];
       store.set("historyBooks", this.historybooks);
-      Notify({ type: 'success', message: '清除成功！' });
+      Notify({ type: "success", message: "清除成功！" });
     },
     checkAll() {
       this.$refs.checkboxGroup.toggleAll(true);
@@ -188,11 +200,11 @@ export default {
       //删除书架
       Api.removeBooksFromBookShelf(this.checkedBook, res => {
         if (res.status != 200) {
-          Notify({ type: 'danger', message: res.data });
+          Notify({ type: "danger", message: res.data });
         } else {
-          Notify({ type: 'success', message: '删除成功！' });
+          Notify({ type: "success", message: "删除成功！" });
           //重新获取书架
-          Api.getBookShelf( res => {
+          Api.getBookShelf(res => {
             if (res.status == 200) {
               this.mybooks = res.data.books;
               Toast.clear();
@@ -204,6 +216,12 @@ export default {
     //书架编辑
     editShelf() {
       this.editStatus = !this.editStatus;
+    },
+    getbookImg(bookId) {
+      if (!bookId) {
+        return '';
+      }
+      return "https://api.rbxgg.cn/book/image/" + bookId + ".jpeg";
     },
     onLoad() {}
   }

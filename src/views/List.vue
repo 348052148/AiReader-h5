@@ -127,7 +127,7 @@ export default {
     },
     getbookImg(bookId) {
       if (!bookId) {
-        return false;
+        return '';
       }
       return "https://api.rbxgg.cn/book/image/" + bookId + ".jpeg";
     }
