@@ -8,7 +8,7 @@ class Api {
         axios.defaults.headers.common['Authorization'] = 'Bearer ' + this.apiToken;
         axios.defaults.headers.common['Accept'] = 'application/json';
     }
-    setToken(){
+    setToken() {
         this.apiToken = store.get('api_token');
         axios.defaults.headers.common['Authorization'] = 'Bearer ' + this.apiToken;
     }
@@ -28,7 +28,7 @@ class Api {
         return axios.get(host + '/api/book/' + bookId)
             .then(function (response) {
                 sucessFn(response)
-            }).catch(function(){
+            }).catch(function () {
                 catchFn()
             })
     }
@@ -40,39 +40,55 @@ class Api {
     }
     getBookChapters(bookId, page, sucessFn) {
         //book/bc688ee6e68f9209d1153bfabd861537/chapters
-        return axios.get(host + '/api/book/' + bookId + '/chapters?page='+page)
+        return axios.get(host + '/api/book/' + bookId + '/chapters?page=' + page)
             .then(function (response) {
                 sucessFn(response)
             })
     }
 
     //书架操作
-    getBookShelf(sucessFn) {
+    getBookShelf(successFn, failureFn) {
         return axios.get(host + '/api/bookshelf')
             .then(function (response) {
-                sucessFn(response)
+                if (response.data.status) {
+                    successFn(response);
+                } else {
+                    failureFn(response);
+                }
             })
     }
-    addBookIntoBookShelf( bookId, sucessFn) {
+    addBookIntoBookShelf(bookId, successFn, failureFn) {
         return axios.post(host + '/api/bookshelf/' + bookId, {
             readNum: 0,
             readOffset: 0
         }).then(function (response) {
-            sucessFn(response)
+            if (response.data.status) {
+                successFn(response);
+            } else {
+                failureFn(response);
+            }
         })
     }
-    removeBooksFromBookShelf(bookIds, sucessFn) {
-        return axios.delete(host + '/api/bookshelf/books/'+ bookIds.join(','))
-        .then(function (response) {
-            sucessFn(response)
-        })    
+    removeBooksFromBookShelf(bookIds, successFn, failureFn) {
+        return axios.delete(host + '/api/bookshelf/books/' + bookIds.join(','))
+            .then(function (response) {
+                if (response.data.status) {
+                    successFn(response);
+                } else {
+                    failureFn(response);
+                }
+            })
     }
-    updateBookFromBookShelf(bookId, chapter , sucessFn){
+    updateBookFromBookShelf(bookId, chapter, successFn, failureFn) {
         return axios.put(host + '/api/bookshelf/' + bookId, {
             readNum: chapter,
             readOffset: 0
         }).then(function (response) {
-            sucessFn(response)
+            if (response.data.status) {
+                successFn(response);
+            } else {
+                failureFn(response);
+            }
         })
     }
 
@@ -88,29 +104,42 @@ class Api {
                 sucessFn(response)
             })
     }
-    register(phoneNumber, code, password, surePassword, sucessFn) {
+    register(phoneNumber, code, password, surePassword, successFn, failureFn) {
         return axios.post(host + '/api/register', {
-            phone:phoneNumber,
+            phone: phoneNumber,
             code: code,
             password: password,
             repeatPassword: surePassword
         }).then(function (response) {
-            sucessFn(response)
+            if (response.data.status) {
+                successFn(response);
+            } else {
+                failureFn(response);
+            }
         })
     }
-    loginByPhoneCode(phoneNumber, code, sucessFn) {
-        return axios.post(host + '/api/user/' + phoneNumber + '/login', {
+    loginByPhoneCode(phoneNumber, code, successFn, failureFn) {
+        return axios.post(host + '/api/phone/login', {
+            phone: phoneNumber,
             code: code,
         }).then(function (response) {
-            sucessFn(response)
+            if (response.data.status) {
+                successFn(response);
+            } else {
+                failureFn(response);
+            }
         })
     }
-    loginByPassword(phoneNumber, password, sucessFn) {
+    loginByPassword(phoneNumber, password, successFn, failureFn) {
         return axios.post(host + '/api/login', {
-            phone:phoneNumber,
-            password:password
+            phone: phoneNumber,
+            password: password
         }).then(function (response) {
-            sucessFn(response)
+            if (response.data.status) {
+                successFn(response);
+            } else {
+                failureFn(response);
+            }
         })
     }
     logout(sucessFn) {
@@ -119,7 +148,13 @@ class Api {
         })
     }
     sendValidCode(phoneNumber, sucessFn) {
-        return axios.post(host + '/api/user/' + phoneNumber + '/sms/code', { a: 1 })
+        return axios.post(host + '/api/phone/' + phoneNumber + '/sms', { a: 1 })
+            .then(function (response) {
+                sucessFn(response)
+            })
+    }
+    resetPassword(password, sucessFn) {
+        return axios.post(host + '/api/password/rest', { password: password })
             .then(function (response) {
                 sucessFn(response)
             })

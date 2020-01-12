@@ -108,11 +108,17 @@ export default {
           //加入书架
           let user = store.get("user") || {};
           if (user) {
-            Api.getBookShelf((res) => {
-              if (res.status == 200) {
-                this.canJoinBookShelf = !this.inBooks(res.data.books, this.book);
+            Api.getBookShelf(
+              res => {
+                this.canJoinBookShelf = !this.inBooks(
+                  res.data.books,
+                  this.book
+                );
+              },
+              res => {
+                Notify({ type: "warning", message: res.data.message });
               }
-            });
+            );
           }
         } else {
           this.$router.go(-1);
@@ -145,23 +151,25 @@ export default {
     joinBookShelf() {
       let user = store.get("user") || {};
       if (Object.keys(user).length > 0) {
-        Api.addBookIntoBookShelf(this.book.book_id, res => {
-          if (res.status != 200) {
-            Toast.loading({
-              message: res.data
-            });
-          } else {
+        Api.addBookIntoBookShelf(
+          this.book.book_id,
+          () => {
             Notify({ type: "success", message: "加入书架成功！" });
             this.canJoinBookShelf = true;
+          },
+          res => {
+            Toast.loading({
+              message: res.data.message
+            });
           }
-        });
+        );
       } else {
         //跳出提示框，并且引导用户进行登录
       }
     },
     getbookImg(bookId) {
       if (!bookId) {
-        return false;
+        return "";
       }
       return "https://api.rbxgg.cn/book/image/" + bookId + ".jpeg";
     }

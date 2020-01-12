@@ -45,7 +45,7 @@
                       <label>{{book.title}}</label>
                     </span>
                     <span class="author">
-                      <label>读到：{{book.chapter_title}}</label>
+                      <label>{{book.chapter_title}}</label>
                     </span>
                   </li>
                 </router-link>
@@ -72,7 +72,7 @@
                       <label>{{book.title}}</label>
                     </span>
                     <span class="author">
-                      <label>读到：{{book.chapter_title}}</label>
+                      <label>{{book.chapter_title}}</label>
                     </span>
                   </li>
                 </van-checkbox-group>
@@ -172,12 +172,16 @@ export default {
         message: "加载中...",
         forbidClick: true
       });
-      Api.getBookShelf(res => {
-        if (res.status == 200) {
+      Api.getBookShelf(
+        res => {
           this.mybooks = res.data.books;
           Toast.clear();
+        },
+        res => {
+          Toast.clear();
+          Notify({ type: "danger", message: res.data.message });
         }
-      });
+      );
     } else {
       this.active = 1;
     }
@@ -198,20 +202,25 @@ export default {
     },
     deleteShelf() {
       //删除书架
-      Api.removeBooksFromBookShelf(this.checkedBook, res => {
-        if (res.status != 200) {
-          Notify({ type: "danger", message: res.data });
-        } else {
+      Api.removeBooksFromBookShelf(
+        this.checkedBook,
+        () => {
           Notify({ type: "success", message: "删除成功！" });
           //重新获取书架
-          Api.getBookShelf(res => {
-            if (res.status == 200) {
+          Api.getBookShelf(
+            res => {
               this.mybooks = res.data.books;
               Toast.clear();
+            },
+            res => {
+              Notify({ type: "danger", message: res.data.message });
             }
-          });
+          );
+        },
+        res => {
+          Notify({ type: "danger", message: res.data.message });
         }
-      });
+      );
     },
     //书架编辑
     editShelf() {
@@ -219,7 +228,7 @@ export default {
     },
     getbookImg(bookId) {
       if (!bookId) {
-        return '';
+        return "";
       }
       return "https://api.rbxgg.cn/book/image/" + bookId + ".jpeg";
     },

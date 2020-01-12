@@ -11,6 +11,7 @@ import Search from '../views/Search'
 import Login from '../views/Login'
 import Register from '../views/Register'
 import Setting from '../views/Setting'
+import ResetPassword from '../views/ResetPassword'
 
 Vue.use(VueRouter)
 
@@ -75,6 +76,11 @@ const routes = [
     path: '/setting',
     name: 'setting',
     component: Setting
+  },
+  {
+    path: '/resetPassword',
+    name: 'resetPassword',
+    component: ResetPassword
   }
 ]
 

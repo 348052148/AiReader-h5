@@ -35,7 +35,8 @@
                 height="140"
                 :src="getbookImg(book.book_id)"
                 :show-loading="true"
-                :error="book.cover"
+                :alt="book.cover"
+                @error="errorImg"
               >
                 <template v-slot:loading>
                   <van-loading type="spinner" size="20" />
@@ -76,7 +77,6 @@
                 height="140"
                 :src="getbookImg(book.book_id)"
                 :show-loading="true"
-                :error="book.cover"
               >
                 <template v-slot:loading>
                   <van-loading type="spinner" size="20" />

@@ -35,8 +35,8 @@
         label="密码"
         type="password"
         placeholder="请输入密码"
-        :error-message="passwordMsg"
       />
+      <!--错误-->
     </van-cell-group>
     <div v-if="type == 'login' || type == 'pwLogin'">
       <van-row class="warn">
@@ -53,13 +53,7 @@
       </div>
     </div>
     <div v-if="type == 'register'">
-      <van-field
-        v-model="password"
-        label="密码"
-        type="password"
-        placeholder="请输入密码"
-        :error-message="passwordMsg"
-      />
+      <van-field v-model="password" label="密码" type="password" placeholder="请输入密码" />
       <van-field
         v-model="surePassword"
         type="password"
@@ -75,8 +69,17 @@
           </van-col>
         </van-checkbox>
       </van-row>
+      <van-row>
+        <van-tag type="warning">{{error}}</van-tag>
+      </van-row>
       <div class="loginDiv">
-        <van-button type="info" :disabled="!checked" size="normal" class="login" @click="registerAction">注册</van-button>
+        <van-button
+          type="info"
+          :disabled="!checked"
+          size="normal"
+          class="login"
+          @click="registerAction"
+        >注册</van-button>
       </div>
       <div class="loginDiv">
         <span :style="{fontSize: '15px', color: '#1989fa'}" @click="toLogin">返回登录</span>
@@ -107,7 +110,7 @@
 
 <script>
 import Api from "../api.js";
-import { Toast } from "vant";
+import { Toast, Notify } from "vant";
 import store from "storejs";
 export default {
   name: "Login",
@@ -127,6 +130,7 @@ export default {
       intervalStr: "发送验证码"
     };
   },
+  created() {},
   methods: {
     toPwLogin() {
       this.type = "pwLogin";
@@ -175,6 +179,9 @@ export default {
       Api.setToken();
       this.$router.replace("/user");
     },
+    loginFailure(message) {
+      Notify({ type: "danger", message: message });
+    },
     loginAction() {
       if (!this.phoneNumber) {
         return (this.errPhoneMsg = "请输入手机号！");
@@ -187,26 +194,34 @@ export default {
         forbidClick: true
       });
       if (this.type == "login") {
-        Api.loginByPhoneCode(this.phoneNumber, this.code, res => {
-          if (res.status != 200) {
-            this.errPhoneMsg = res.data.message;
-          } else {
+        Api.loginByPhoneCode(
+          this.phoneNumber,
+          this.code,
+          res => {
             this.loginSuccess(res.data.user, res.data.token);
+            Toast.clear();
+          },
+          res => {
+            this.loginFailure(res.data.message);
+            Toast.clear();
           }
-          Toast.clear();
-        });
+        );
       } else {
         if (!this.password) {
           return (this.passwordMsg = "请输入密码！");
         }
-        Api.loginByPassword(this.phoneNumber, this.password, res => {
-          if (res.status != 200) {
-            this.passwordMsg = res.data.message;
-          } else {
+        Api.loginByPassword(
+          this.phoneNumber,
+          this.password,
+          res => {
             this.loginSuccess(res.data.user, res.data.token);
+            Toast.clear();
+          },
+          res => {
+            this.loginFailure(res.data.message);
+            Toast.clear();
           }
-          Toast.clear();
-        });
+        );
       }
     },
     registerAction() {
@@ -228,11 +243,11 @@ export default {
         this.password,
         this.surePassword,
         res => {
-          if (res.status != 200) {
-            this.errPhoneMsg = res.data.message;
-          } else {
-            this.loginSuccess(res.data.user, res.data.token);
-          }
+          this.loginSuccess(res.data.user, res.data.token);
+          Toast.clear();
+        },
+        res => {
+          this.loginFailure(res.data.message);
           Toast.clear();
         }
       );

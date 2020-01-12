@@ -6,13 +6,13 @@
         <div class="article-action-mid" @click="switchNav" id="action_mid"></div>
       </div>
       <!-- 上面导航栏-->
-      <div id="top_nav" class="top-nav" v-if="displayNav"  @click="onClickLeft">
-        <van-icon name="arrow-left" class="icon-back"/>
+      <div id="top_nav" class="top-nav" v-if="displayNav" @click="onClickLeft">
+        <van-icon name="arrow-left" class="icon-back" />
         <label class="nav-title">{{bookName}}</label>
       </div>
       <!-- <div id="fiction_chapter_title"></div> -->
       <!-- 主要阅读内容-->
-      <div id="fiction_container" class="m-read-content" >
+      <div id="fiction_container" class="m-read-content">
         <div class="p" :style="readStyle">
           <h4>{{chapterContents.title}}</h4>
           <div v-html="chapterContents.contents"></div>
@@ -20,7 +20,7 @@
       </div>
     </div>
     <!-- 控制章节的按钮-->
-    <div  v-if="chapterContents.title" class="m-button-bar">
+    <div v-if="chapterContents.title" class="m-button-bar">
       <ul class="u-tab">
         <li id="prev_button" @click="prevChapter">上一章</li>
         <li id="next_button" @click="nextChapter">下一章</li>
@@ -56,7 +56,7 @@
     </ul>
     <div class="bottom-nav" id="bottom_nav" v-if="displayNav">
       <div class="item menu-button" id="menu_button">
-        <router-link :to="'/chapter?bookId='+bookId+'&bookName=' + bookName" replace >
+        <router-link :to="'/chapter?bookId='+bookId+'&bookName=' + bookName" replace>
           <div class="item-wrap">
             <div class="icon-menu"></div>
             <div class="icon-text">目录</div>
@@ -89,7 +89,7 @@
 <script>
 import Api from "../api.js";
 import store from "storejs";
-import { Toast,Notify } from "vant";
+import { Toast, Notify } from "vant";
 export default {
   data() {
     return {
@@ -97,7 +97,7 @@ export default {
       displayNav: false,
       displayFont: false,
       currentStyle: "",
-      dayStyle: true,  //true 为白天模式  false 为夜间模式
+      dayStyle: true, //true 为白天模式  false 为夜间模式
       bgs: [
         {
           class: "bg1",
@@ -123,8 +123,8 @@ export default {
       chapterContents: {},
       chapter: 0,
       bookId: "",
-      bookName: '',
-      user:{}
+      bookName: "",
+      user: {}
     };
   },
   created() {
@@ -132,18 +132,18 @@ export default {
     let bookName = this.$route.query.bookName;
     this.bookId = bookId;
     this.bookName = bookName;
-    if(this.$route.query.chapter) {
+    if (this.$route.query.chapter) {
       this.chapter = parseInt(this.$route.query.chapter);
     } else {
-       this.chapter = 0;
+      this.chapter = 0;
     }
-    this.user = store.get('user') || false;
+    this.user = store.get("user") || false;
     this.getChapterContents(bookId, this.chapter);
   },
   methods: {
-    getChapterContents(bookId, page){
+    getChapterContents(bookId, page) {
       Toast.loading({
-        duration:0,
+        duration: 0,
         message: "加载中...",
         forbidClick: true
       });
@@ -155,20 +155,23 @@ export default {
       });
 
       if (this.user) {
-        Api.updateBookFromBookShelf(bookId, page, (res) => {
-            if (res.status != 200) {
-                Notify({ type: 'danger', message:res.data});
-            }
-        });
+        Api.updateBookFromBookShelf(
+          bookId,
+          page,
+          () => {},
+          res => {
+            Notify({ type: "danger", message: res.data });
+          }
+        );
       }
-      
     },
-    switchStyle(){  //切换模式，夜间还是白天
+    switchStyle() {
+      //切换模式，夜间还是白天
       this.dayStyle = !this.dayStyle;
-      if (!this.dayStyle){
-        this.currentStyle = 'background: none rgb(0, 0, 0);';
-      }else{
-        this.currentStyle = 'background: rgb(255, 255, 255);';
+      if (!this.dayStyle) {
+        this.currentStyle = "background: none rgb(0, 0, 0);";
+      } else {
+        this.currentStyle = "background: rgb(255, 255, 255);";
       }
     },
     nextChapter() {
@@ -177,14 +180,14 @@ export default {
     },
     prevChapter() {
       if (this.chapter <= 0) {
-        Notify({ type: 'danger', message:'已经是第一章了'});
+        Notify({ type: "danger", message: "已经是第一章了" });
         return false;
       }
       this.getChapterContents(this.bookId, this.chapter - 1);
       this.chapter = this.chapter - 1;
     },
 
-    onClickLeft(){
+    onClickLeft() {
       this.$router.back(-1);
     },
 
@@ -265,7 +268,7 @@ body {
   background: #000;
   opacity: 0.9;
 }
-.u-table{
+.u-table {
   border-radius: 0px;
   margin: 0 0;
   position: fixed;
@@ -298,7 +301,7 @@ body {
   background: #000;
   color: #d5d5d6;
 }
-.icon-back{
+.icon-back {
   font-size: 20px;
 }
 

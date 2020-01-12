@@ -1,10 +1,8 @@
 <template>
     <div>
-        <div id="top_nav" class="top-nav" @click="onClickLeft">
-            <van-icon name="arrow-left" class="icon-back" style="font-size: 20px;"/>
-            <label class="nav-title">返回</label>
-        </div>
+        <van-nav-bar title="设置" left-text="返回" left-arrow @click-left="onClickLeft" />
         <div class="back-content">
+            <van-cell title="重置密码" to="/resetPassword" is-link />
             <van-cell title="联系我们" is-link />
             <van-cell title="帮助中心" is-link />
             <van-button type="info" class="exit-bu" @click="exitLogin" block>退出登录</van-button>
